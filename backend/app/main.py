@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app import models  # noqa: F401  (registers the tables with SQLAlchemy)
 from app.core.config import settings
 from app.db import Base, engine
-from app.routers import auth
+from app.routers import auth, meetings
 
 # Temporary shortcut to create tables. Alembic migrations replace this before submission.
 Base.metadata.create_all(bind=engine)
@@ -20,6 +20,7 @@ app.add_middleware(
 )
 
 app.include_router(auth.router)
+app.include_router(meetings.router)
 
 
 @app.get("/health")
