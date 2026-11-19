@@ -6,8 +6,9 @@ from sqlalchemy.orm import Session
 
 from app.core.deps import get_current_user
 from app.db import get_db
-from app.models import Meeting, User
+from app.models import ActionItem, Meeting, User
 from app.schemas import MeetingCreate, MeetingDetail, MeetingOut
+from app.services.ai import AIInvalidOutput, AIUnavailable, analyse_transcript
 from app.services.transcript import read_transcript_upload
 
 router = APIRouter(prefix="/meetings", tags=["meetings"])
@@ -71,3 +72,41 @@ def list_meetings(user: User = Depends(get_current_user), db: Session = Depends(
 @router.get("/{meeting_id}", response_model=MeetingDetail)
 def get_meeting(meeting_id: int, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     return _get_owned_meeting(meeting_id, user, db)
+
+
+@router.post("/{meeting_id}/analyse", response_model=MeetingDetail)
+async def analyse_meeting(
+    meeting_id: int,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    meeting = _get_owned_meeting(meeting_id, user, db)
+    if meeting.analysis_status == "done":
+        # Re-running would replace action items the user may have already edited.
+        raise HTTPException(status_code=409, detail="This meeting has already been analysed")
+
+    try:
+        summary, decisions, items = await analyse_transcript(meeting.transcript, meeting.meeting_date)
+    except (AIUnavailable, AIInvalidOutput) as exc:
+        # The transcript is already saved. Record the failure so the user can retry.
+        meeting.analysis_status = "failed"
+        meeting.analysis_error = str(exc)[:200]
+        db.commit()
+        raise HTTPException(status_code=503, detail=str(exc))
+
+    meeting.summary = summary
+    meeting.decisions = decisions
+    meeting.analysis_status = "done"
+    meeting.analysis_error = None
+    for item in items:
+        db.add(
+            ActionItem(
+                meeting_id=meeting.id,
+                text=item.text,
+                owner=item.owner,
+                due_date=item.due_date,
+            )
+        )
+    db.commit()
+    db.refresh(meeting)
+    return meeting

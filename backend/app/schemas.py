@@ -39,7 +39,7 @@ class MeetingCreate(BaseModel):
 
 
 class MeetingOut(BaseModel):
-    # List view: no transcript, so the list stays small.
+    # List view: no transcript or AI results, so the list stays small.
     model_config = ConfigDict(from_attributes=True)
 
     id: int
@@ -48,6 +48,40 @@ class MeetingOut(BaseModel):
     created_at: datetime
 
 
+class ActionItemOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    text: str
+    owner: str | None
+    due_date: date | None
+    status: str
+
+
 class MeetingDetail(MeetingOut):
-    # Detail view: adds the full original transcript.
     transcript: str
+    summary: str | None
+    decisions: list[str] | None
+    analysis_status: str
+    analysis_error: str | None
+    action_items: list[ActionItemOut]
+
+
+# What the AI is asked to return. Pydantic checks every field, and the same models
+# generate the JSON schema that is sent to OpenRouter.
+class AISummary(BaseModel):
+    summary: str = Field(min_length=1, max_length=2000)
+
+
+class AIDecisions(BaseModel):
+    decisions: list[str] = Field(max_length=30)
+
+
+class AIActionItem(BaseModel):
+    text: str = Field(min_length=1, max_length=500)
+    owner: str | None = None
+    due_date: date | None = None
+
+
+class AIActionItems(BaseModel):
+    action_items: list[AIActionItem] = Field(max_length=50)

@@ -1,7 +1,7 @@
 from datetime import date, datetime, timezone
 
-from sqlalchemy import Date, DateTime, ForeignKey, String, Text
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import JSON, Date, DateTime, ForeignKey, String, Text
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db import Base
 
@@ -32,7 +32,8 @@ class UserSession(Base):
     token_hash: Mapped[str] = mapped_column(String(64), unique=True, index=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
-    
+
+
 class Meeting(Base):
     __tablename__ = "meetings"
 
@@ -44,3 +45,29 @@ class Meeting(Base):
     # Stored exactly as received, before any AI call. If the AI fails, the transcript is still here.
     transcript: Mapped[str] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+
+    # AI results. Only written when the whole analysis succeeds, so a failed run never leaves partial data.
+    summary: Mapped[str | None] = mapped_column(Text, default=None)
+    decisions: Mapped[list[str] | None] = mapped_column(JSON, default=None)
+    # pending, done or failed. A failed meeting can be retried.
+    analysis_status: Mapped[str] = mapped_column(String(20), default="pending")
+    analysis_error: Mapped[str | None] = mapped_column(String(200), default=None)
+
+    action_items: Mapped[list["ActionItem"]] = relationship(
+        back_populates="meeting", cascade="all, delete-orphan", order_by="ActionItem.id"
+    )
+
+
+class ActionItem(Base):
+    __tablename__ = "action_items"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    meeting_id: Mapped[int] = mapped_column(ForeignKey("meetings.id"), index=True)
+    text: Mapped[str] = mapped_column(String(500))
+    # Blank unless the transcript names them. The AI never guesses an owner or a date.
+    owner: Mapped[str | None] = mapped_column(String(100), default=None)
+    due_date: Mapped[date | None] = mapped_column(Date, default=None)
+    # to do, in progress or done. Users change this, and the AI always creates items as "to do".
+    status: Mapped[str] = mapped_column(String(20), default="to do")
+
+    meeting: Mapped[Meeting] = relationship(back_populates="action_items")

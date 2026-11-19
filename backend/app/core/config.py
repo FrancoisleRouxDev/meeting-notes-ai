@@ -7,9 +7,13 @@ class Settings(BaseSettings):
 
     database_url: str = "sqlite:///./app.db"
     frontend_origin: str = "http://localhost:5173"
-    # Set to true in production, where the site runs on HTTPS.
     session_cookie_secure: bool = False
     session_days: int = 7
+
+    openrouter_api_key: str = ""
+    openrouter_model: str = ""
+    # Free models can be slow, so allow time before reporting a failure.
+    openrouter_timeout_seconds: float = 60.0
 
 
 settings = Settings()
