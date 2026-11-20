@@ -110,3 +110,19 @@ async def analyse_meeting(
     db.commit()
     db.refresh(meeting)
     return meeting
+
+@router.delete("/{meeting_id}", status_code=204)
+def delete_meeting(
+    meeting_id: int,
+    confirm: bool = False,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    # Deleting is permament. The request must say it has been comfirmed.
+    # The frontend shows the "are you sure?" dialog and then sends confirm=true.
+    if not confirm: 
+        raise HTTPException(status_code=400, detail="Set confirm=true to delete this meeting")
+    meeting = _get_owned_meeting(meeting_id, user, db)
+    # Action items are deleted with the meeting (cascade set in models.py)
+    db.delete(meeting)
+    db.commit()

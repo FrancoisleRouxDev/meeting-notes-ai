@@ -27,14 +27,19 @@ PROMPTS = {
     ),
     "decisions": (
         AIDecisions,
-        "List the decisions the group agreed on. A decision is an agreed outcome, not a "
-        "suggestion or a question. Return an empty list if there are none.",
+        "List the decisions the group made: choices about what to do, when, or which option to take. "
+        "A task someone agreed to do is not a desicion, so leave it out. "
+        "Return an empty list if the group made no desicions.",
     ),
     "action_items": (
         AIActionItems,
-        "List the tasks someone committed to. Set owner only to a name the transcript gives "
-        "for that task, otherwise null. Set due_date (YYYY-MM-DD) only when the transcript "
-        "states a deadline, worked out from the meeting date; otherwise null. Never guess.",
+        "List each task that a named person or the whole group clearly committed doing. "
+        "Leave out suggestions, wishes, and things that group said they would look at 'at some point. "
+        "Include each task once, even if it was mentioned several times. "
+        "Set owner only to a name the transscript gives for that task, otherwise null. "
+        "Set due_date (YYY-MM-DD) only to a deadline for the task itself, never the date of a meeting "
+        "or event it mentions. Resolve weekdays such as 'Friday' from the meeting date. "
+        "If nothing was committed to, return an empty list.",
     ),
 }
 
