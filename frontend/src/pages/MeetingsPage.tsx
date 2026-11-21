@@ -1,29 +1,36 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
-import { api } from "../api";
-import { useMe } from "../auth";
+import { Link } from "react-router-dom";
+import { useMeetings } from "../meetings";
 
-// Temporary page. The meeting list replaces this in the next step.
 export default function MeetingsPage() {
-  const { data: user } = useMe();
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
-
-  const logout = useMutation({
-    mutationFn: () => api<void>("/auth/logout", { method: "POST" }),
-    onSettled: () => {
-      queryClient.setQueryData(["me"], null);
-      navigate("/login", { replace: true });
-    },
-  });
+  const { data: meetings, isPending, isError, error } = useMeetings();
 
   return (
     <main>
       <h1>Meetings</h1>
-      <p>Signed in as {user?.email}</p>
-      <button onClick={() => logout.mutate()} disabled={logout.isPending}>
-        Log out
-      </button>
+
+      {isPending && <p role="status">Loading meetings…</p>}
+      {isError && (
+        <p role="alert" className="error">
+          Couldn't load meetings: {error.message}
+        </p>
+      )}
+
+      {meetings && meetings.length === 0 && (
+        <p>
+          No meetings yet. <Link to="/meetings/new">Add your first transcript</Link>.
+        </p>
+      )}
+
+      {meetings && meetings.length > 0 && (
+        <ul className="meeting-list">
+          {meetings.map((meeting) => (
+            <li key={meeting.id}>
+              <Link to={`/meetings/${meeting.id}`}>{meeting.title}</Link>
+              <span className="muted"> {meeting.meeting_date}</span>
+            </li>
+          ))}
+        </ul>
+      )}
     </main>
   );
 }
