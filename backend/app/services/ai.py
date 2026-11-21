@@ -28,18 +28,22 @@ PROMPTS = {
     "decisions": (
         AIDecisions,
         "List the decisions the group made: choices about what to do, when, or which option to take. "
-        "A task someone agreed to do is not a desicion, so leave it out. "
-        "Return an empty list if the group made no desicions.",
+        "A task someone agreed to do is not a decision, so leave it out. "
+        "If a decision was changed during the meeting, use only the final outcome. "
+        "Write every date with its year. If the transcript gives a month and day without a year, "
+        "use the meeting's year, or the following year if that date is already past on the meeting date. "
+        "Return an empty list if the group made no decisions.",
     ),
     "action_items": (
         AIActionItems,
-        "List each task that a named person or the whole group clearly committed doing. "
-        "Leave out suggestions, wishes, and things that group said they would look at 'at some point. "
+        "List every task that a named person or the whole group committed to, or that the group said "
+        "needs doing, including tasks nobody volunteered for (for example, 'somebody needs to book the venue'). "
+        "Leave out suggestions, wishes, and things to look at 'at some point'. "
         "Include each task once, even if it was mentioned several times. "
-        "Set owner only to a name the transscript gives for that task, otherwise null. "
-        "Set due_date (YYY-MM-DD) only to a deadline for the task itself, never the date of a meeting "
-        "or event it mentions. Resolve weekdays such as 'Friday' from the meeting date. "
-        "If nothing was committed to, return an empty list.",
+        "Set owner only to a name the transcript gives for that task, otherwise null. "
+        "Set due_date (YYYY-MM-DD) only to a deadline for the task itself, never the date of a meeting "
+        "or event it mentions. Work out weekdays and relative phrases such as 'Friday' or "
+        "'end of next week' from the meeting date. If nothing was committed to, return an empty list.",
     ),
 }
 
