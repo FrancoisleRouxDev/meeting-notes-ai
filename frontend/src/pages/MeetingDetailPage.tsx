@@ -2,6 +2,12 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { ApiError } from "../api";
 import { useAnalyseMeeting, useDeleteMeeting, useMeeting } from "../meetings";
 
+const statusLabels = {
+  pending: "Not analysed yet",
+  done: "Analysis complete",
+  failed: "Analysis failed",
+} as const;
+
 export default function MeetingDetailPage() {
   const { id } = useParams();
   const meetingId = Number(id);
@@ -54,7 +60,7 @@ export default function MeetingDetailPage() {
       </p>
       <h1>{meeting.title}</h1>
       <p className="muted">
-        {meeting.meeting_date} · Analysis: {meeting.analysis_status}
+        {meeting.meeting_date} · <span className="badge">{statusLabels[meeting.analysis_status]}</span>
       </p>
 
       {meeting.analysis_status === "failed" && (

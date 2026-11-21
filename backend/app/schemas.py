@@ -75,7 +75,13 @@ class AISummary(BaseModel):
 
 class AIDecisions(BaseModel):
     decisions: list[str] = Field(max_length=30)
-
+    
+    @field_validator("decisions")
+    @classmethod
+    def clean_decisions(cls, items: list[str]) -> list[str]:
+        #Some models prefix items with ":" or "-", this strips that.
+        cleaned = [item.lstrip(" :-*•").strip() for item in items]
+        return [item for item in cleaned if item]
 
 class AIActionItem(BaseModel):
     text: str = Field(min_length=1, max_length=500)
