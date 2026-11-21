@@ -1,7 +1,10 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import RequireAuth from "./components/RequireAuth";
+import Layout from "./components/Layout";
 import AuthPage from "./pages/AuthPage";
+import MeetingDetailPage from "./pages/MeetingDetailPage";
 import MeetingsPage from "./pages/MeetingsPage";
+import NewMeetingPage from "./pages/NewMeetingPage";
 
 export default function App() {
   return (
@@ -9,7 +12,11 @@ export default function App() {
       <Route path="/login" element={<AuthPage mode="login" />} />
       <Route path="/register" element={<AuthPage mode="register" />} />
       <Route element={<RequireAuth />}>
-        <Route path="/meetings" element={<MeetingsPage />} />
+        <Route element={<Layout />}>
+          <Route path="/meetings" element={<MeetingsPage />} />
+          <Route path="/meetings/new" element={<NewMeetingPage />} />
+          <Route path="/meetings/:id" element={<MeetingDetailPage />} />
+        </Route>
       </Route>
       <Route path="*" element={<Navigate to="/meetings" replace />} />
     </Routes>
