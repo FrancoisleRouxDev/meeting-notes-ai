@@ -153,3 +153,8 @@ class AIActionItem(BaseModel):
 
 class AIActionItems(BaseModel):
     action_items: list[AIActionItem] = Field(max_length=50)
+    
+class ActionitemWithMeeting(ActionItemOut):
+    meeting_id: int
+    meeting_title: str
+    
