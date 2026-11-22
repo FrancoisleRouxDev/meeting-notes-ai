@@ -2,7 +2,69 @@ from datetime import date, datetime
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
+class MeetingUpdate(BaseModel):
+    # only the fields the client send are changed.
+    title: str | None = Field(default=None, min_length=1, max_length=200)
+    summary: str | None = Field(default=None, max_length=2000)
+    decisions: list [str] | None = Field(default=None, max_legth=50)
+    
+    @field_validator("title", "summary")
+    @classmethod
+    def title_rules(cls, value: str | None) -> str | None:
+        if value is None:
+            raise ValueError("cannot be empty")
+        value = value.strip()
+        if not value:
+            raise ValueError("must not be blank")
+        return value
+    
+class ActionItemCreate(BaseModel):
+    text: str = Field(min_length=1, max_length=500)
+    owner: str | None = Field(default=None, max_length=100)
+    due_date: date | None = None
+    status: str = "to do"
 
+    @field_validator("text")
+    @classmethod
+    def text_rules(cls, value: str) -> str:
+        value = value.strip()
+        if not value:
+            raise ValueError("must not be blank")
+        return value
+
+    @field_validator("status")
+    @classmethod
+    def status_rules(cls, value: str) -> str:
+        if value not in ALLOWED_STATUSES:
+            raise ValueError("must be 'to do', 'in progress' or 'done'")
+        return value
+
+
+class ActionItemUpdate(BaseModel):
+    # Fields left out of the request are not changed. Sending null for owner or due_date clears it.
+    text: str | None = Field(default=None, min_length=1, max_length=500)
+    owner: str | None = Field(default=None, max_length=100)
+    due_date: date | None = None
+    status: str | None = None
+
+    @field_validator("text")
+    @classmethod
+    def text_rules(cls, value: str | None) -> str | None:
+        # This only runs when the field is sent. Sending null here is refused.
+        if value is None:
+            raise ValueError("cannot be empty")
+        value = value.strip()
+        if not value:
+            raise ValueError("must not be blank")
+        return value
+
+    @field_validator("status")
+    @classmethod
+    def status_rules(cls, value: str | None) -> str | None:
+        if value is None or value not in ALLOWED_STATUSES:
+            raise ValueError("must be 'to do', 'in progress' or 'done'")
+        return value
+    
 class RegisterIn(BaseModel):
     email: EmailStr
     # Length matters more than complexity rules. Limits stop oversized input.
