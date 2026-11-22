@@ -154,7 +154,11 @@ class AIActionItem(BaseModel):
 class AIActionItems(BaseModel):
     action_items: list[AIActionItem] = Field(max_length=50)
     
-class ActionitemWithMeeting(ActionItemOut):
+# The statuses an action item can have. Used by the API and the open items filter.
+ALLOWED_STATUSES = ("to do", "in progress", "done")
+
+
+class ActionItemWithMeeting(ActionItemOut):
+    # The open items view shows which meeting each item belongs to.
     meeting_id: int
     meeting_title: str
-    

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, select
@@ -7,17 +7,17 @@ from sqlalchemy.orm import Session
 from app.core.deps import get_current_user
 from app.db import get_db
 from app.models import ActionItem, Meeting, User
-from app.schemas import ActionItemOut, ActionItemCreate, ActionItemUpdate
 from app.routers.meetings import _get_owned_meeting
-from apps.schemas import (
+from app.schemas import (
     ALLOWED_STATUSES,
-    ActionItemOut,
     ActionItemCreate,
+    ActionItemOut,
     ActionItemUpdate,
     ActionItemWithMeeting,
 )
 
 router = APIRouter(tags=["action items"])
+
 
 def _get_owned_item(item_id: int, user: User, db: Session) -> ActionItem:
     # The join checks ownership on the server. An item in someone else's meeting
@@ -114,4 +114,3 @@ def delete_action_item(
     item = _get_owned_item(item_id, user, db)
     db.delete(item)
     db.commit()
-    
