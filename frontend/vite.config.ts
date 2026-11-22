@@ -6,12 +6,10 @@ export default defineConfig({
   server: {
     proxy: {
       // The browser talks only to the Vite server, which forwards /api to FastAPI.
-      // That keeps the session cookie on one origin. Calling 127.0.0.1 directly from
-      // localhost would be a different site, so the browser would block the cookie.
+      // The path is kept as it is, because the backend mounts its routes under /api.
       "/api": {
         target: "http://127.0.0.1:8000",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
   },
