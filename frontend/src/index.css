@@ -211,3 +211,72 @@ summary { cursor: pointer; font-weight: 600; margin-bottom: 0.5rem; }
   font-size: 0.9rem;
   margin: 0 0 0.4rem;
 }
+
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.action-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.action-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.done-text {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.item-form {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0.75rem 0;
+}
+
+.add-item h3 {
+  margin: 0;
+}
+
+.action-items {
+  display: block;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.action-items li.action-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  column-gap: 0.75rem;
+  row-gap: 0.4rem;
+  align-items: flex-start;
+}
+
+.action-items li.action-row input[type="checkbox"] {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  margin-top: 0.2rem;
+}
+
+.action-items li.action-row .action-body {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.action-items li.action-row .botton-row {
+  grid-column: 2;
+  grid-row: 2;
+  margin-top: 0;
+  justify-content: flex-start;
+}
