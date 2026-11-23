@@ -280,3 +280,20 @@ summary { cursor: pointer; font-weight: 600; margin-bottom: 0.5rem; }
   margin-top: 0;
   justify-content: flex-start;
 }
+
+.item-card a, 
+.meeting-list a {
+  display: inline-block;
+  margin-top: 0.4rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.item-card a:hover,
+.meeting-list a:hover {
+  opacity: 0.85,
+}

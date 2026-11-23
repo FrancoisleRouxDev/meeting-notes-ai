@@ -28,17 +28,27 @@ PROMPTS = {
     "decisions": (
         AIDecisions,
         "List the decisions the group made: choices about what to do, when, or which option to take. "
-        "A task someone agreed to do is not a desicion, so leave it out. "
-        "Return an empty list if the group made no desicions.",
+        "A task someone agreed to do is not a decision, so leave it out. "
+        "Scheduling the next meeting or event is not a decision, so leave it out. "
+        "Example of a decision: 'We agreed not to renew until the invoice is fixed.' "
+        "Examples of things that are not decisions: 'The next review is on 3 December.' "
+        "and 'Priya will send the quotes.' "
+        "Return an empty list if the group made no decisions.",
     ),
     "action_items": (
         AIActionItems,
-        "List each task that a named person or the whole group clearly committed doing. "
-        "Leave out suggestions, wishes, and things that group said they would look at 'at some point. "
+        "List each task that a named person or the whole group clearly committed to doing. "
+        "Leave out suggestions, wishes, and things the group said they would look at 'at some point'. "
+        "Include a task that nobody was named for, with owner set to null. "
         "Include each task once, even if it was mentioned several times. "
-        "Set owner only to a name the transscript gives for that task, otherwise null. "
-        "Set due_date (YYY-MM-DD) only to a deadline for the task itself, never the date of a meeting "
-        "or event it mentions. Resolve weekdays such as 'Friday' from the meeting date. "
+        "Set owner only to a name the transcript gives for that task, otherwise null. "
+        "Set due_date (YYYY-MM-DD) only when the transcript gives a deadline for the task itself, "
+        "never the date of a meeting or event it mentions. "
+        "If a task is to chase or follow up something that has a stated deadline, that deadline is the "
+        "task's due_date. Example: 'Thabo, chase the security questionnaire, it was due on the 9th' gives "
+        "owner 'Thabo', text 'Chase the security questionnaire', and due_date for the 9th. "
+        "For a date given without a year or month, such as 'the 9th' or 'Friday', use the meeting date's "
+        "year and month, and resolve weekdays from the meeting date. "
         "If nothing was committed to, return an empty list.",
     ),
 }
