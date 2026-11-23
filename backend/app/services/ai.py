@@ -29,21 +29,27 @@ PROMPTS = {
         AIDecisions,
         "List the decisions the group made: choices about what to do, when, or which option to take. "
         "A task someone agreed to do is not a decision, so leave it out. "
-        "If a decision was changed during the meeting, use only the final outcome. "
-        "Write every date with its year. If the transcript gives a month and day without a year, "
-        "use the meeting's year, or the following year if that date is already past on the meeting date. "
+        "Scheduling the next meeting or event is not a decision, so leave it out. "
+        "Example of a decision: 'We agreed not to renew until the invoice is fixed.' "
+        "Examples of things that are not decisions: 'The next review is on 3 December.' "
+        "and 'Priya will send the quotes.' "
         "Return an empty list if the group made no decisions.",
     ),
     "action_items": (
         AIActionItems,
-        "List every task that a named person or the whole group committed to, or that the group said "
-        "needs doing, including tasks nobody volunteered for (for example, 'somebody needs to book the venue'). "
-        "Leave out suggestions, wishes, and things to look at 'at some point'. "
+        "List each task that a named person or the whole group clearly committed to doing. "
+        "Leave out suggestions, wishes, and things the group said they would look at 'at some point'. "
+        "Include a task that nobody was named for, with owner set to null. "
         "Include each task once, even if it was mentioned several times. "
         "Set owner only to a name the transcript gives for that task, otherwise null. "
-        "Set due_date (YYYY-MM-DD) only to a deadline for the task itself, never the date of a meeting "
-        "or event it mentions. Work out weekdays and relative phrases such as 'Friday' or "
-        "'end of next week' from the meeting date. If nothing was committed to, return an empty list.",
+        "Set due_date (YYYY-MM-DD) only when the transcript gives a deadline for the task itself, "
+        "never the date of a meeting or event it mentions. "
+        "If a task is to chase or follow up something that has a stated deadline, that deadline is the "
+        "task's due_date. Example: 'Thabo, chase the security questionnaire, it was due on the 9th' gives "
+        "owner 'Thabo', text 'Chase the security questionnaire', and due_date for the 9th. "
+        "For a date given without a year or month, such as 'the 9th' or 'Friday', use the meeting date's "
+        "year and month, and resolve weekdays from the meeting date. "
+        "If nothing was committed to, return an empty list.",
     ),
 }
 

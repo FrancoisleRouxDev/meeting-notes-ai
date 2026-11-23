@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from app.core.deps import get_current_user
 from app.db import get_db
 from app.models import ActionItem, Meeting, User
-from app.schemas import MeetingCreate, MeetingDetail, MeetingOut
+from app.schemas import MeetingCreate, MeetingDetail, MeetingOut, MeetingUpdate
 from app.services.ai import AIInvalidOutput, AIUnavailable, analyse_transcript
 from app.services.transcript import read_transcript_upload
 
@@ -126,3 +126,19 @@ def delete_meeting(
     # Action items are deleted with the meeting (cascade set in models.py)
     db.delete(meeting)
     db.commit()
+
+
+@router.patch("/{meeting_id}", response_model=MeetingDetail)
+def update_meeting(
+    meeting_id: int,
+    body: MeetingUpdate,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    meeting = _get_owned_meeting(meeting_id, user, db)
+    # Only the fields the client sent are changed.
+    for field, value in body.model_dump(exclude_unset=True).items():
+        setattr(meeting, field, value)
+    db.commit()
+    db.refresh(meeting)
+    return meeting

@@ -5,6 +5,7 @@ import AuthPage from "./pages/AuthPage";
 import MeetingDetailPage from "./pages/MeetingDetailPage";
 import MeetingsPage from "./pages/MeetingsPage";
 import NewMeetingPage from "./pages/NewMeetingPage";
+import OpenItemsPage from "./pages/OpenItemsPage";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
           <Route path="/meetings" element={<MeetingsPage />} />
           <Route path="/meetings/new" element={<NewMeetingPage />} />
           <Route path="/meetings/:id" element={<MeetingDetailPage />} />
+          <Route path="/items" element={<OpenItemsPage />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to="/meetings" replace />} />

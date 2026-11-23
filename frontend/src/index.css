@@ -165,3 +165,135 @@ summary { cursor: pointer; font-weight: 600; margin-bottom: 0.5rem; }
   .topbar .muted { margin-left: 0; }
   .meeting-list li { flex-direction: column; align-items: flex-start; }
 }
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+  margin-bottom: 1.5rem;
+}
+
+.filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.filters label.checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.item-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.item-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.item-card .item-text {
+  margin: 0 0 0.4rem;
+  font-weight: 600;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0 0 0.4rem;
+}
+
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.action-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.action-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.done-text {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.item-form {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0.75rem 0;
+}
+
+.add-item h3 {
+  margin: 0;
+}
+
+.action-items {
+  display: block;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.action-items li.action-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  column-gap: 0.75rem;
+  row-gap: 0.4rem;
+  align-items: flex-start;
+}
+
+.action-items li.action-row input[type="checkbox"] {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  margin-top: 0.2rem;
+}
+
+.action-items li.action-row .action-body {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.action-items li.action-row .botton-row {
+  grid-column: 2;
+  grid-row: 2;
+  margin-top: 0;
+  justify-content: flex-start;
+}
+
+.item-card a, 
+.meeting-list a {
+  display: inline-block;
+  margin-top: 0.4rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.item-card a:hover,
+.meeting-list a:hover {
+  opacity: 0.85,
+}
