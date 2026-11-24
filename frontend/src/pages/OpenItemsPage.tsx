@@ -9,7 +9,7 @@ export default function OpenItemsPage() {
   const { data, isPending, isError, error } = useOpenItems({ status, owner, overdue });
 
   return (
-    <section>
+    <main>
       <h1>My action items</h1>
 
       <div className="filters">
@@ -66,6 +66,6 @@ export default function OpenItemsPage() {
           ))}
         </ul>
       )}
-    </section>
+    </main>
   );
 }
