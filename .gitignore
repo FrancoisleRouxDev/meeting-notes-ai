@@ -5,3 +5,6 @@ node_modules/
 dist/
 backend/static/
 !desktop/dist/
+
+*.db
+__pycache__/
