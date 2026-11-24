@@ -5,7 +5,9 @@ alembic
 pydantic
 pydantic-settings
 email-validator
-argon-cffi
+argon2-cffi
 httpx
-python-multiport
+python-multipart
 pytest
+
+
