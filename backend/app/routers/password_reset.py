@@ -33,23 +33,30 @@ def _now() -> datetime:
     return datetime.now(timezone.utc).replace(tzinfo=None)
 
 def send_reset_email(to: str, link: str) -> None:
-    if not settings.resend_api_key:
+    if not settings.brevo_api_key:
         if settings.password_reset_dev_log:      # local development only
             log.warning("Password reset link for %s: %s", to, link)
         return
-    httpx.post(
-        "https://api.resend.com/emails",
-        headers={"Authorization": f"Bearer {settings.resend_api_key}"},
-        json={
-            "from": settings.mail_from,
-            "to": [to],
-            "subject": "Reset your Meeting Notes AI password",
-            "text": f"Reset your password within {RESET_MINUTES} minutes:\n{link}\n\n"
-                    "If you did not ask for this, you can ignore this email.",
-        },
-        timeout=10,
-    )
-
+    try:
+        response = httpx.post(
+            "https://api.brevo.com/v3/smtp/email",
+            headers={"api-key": settings.brevo_api_key, "accept": "application/json"},
+            json={
+                "sender": {"email": settings.mail_from, "name": "Meeting Notes AI"},
+                "to": [{"email": to}],
+                "subject": "Reset your Meeting Notes AI password",
+                "textContent": (
+                    f"Reset your password within 30 minutes:\n{link}\n\n"
+                    "If you did not ask for this, you can ignore this email."
+                ),
+            },
+            timeout=10,
+        )
+        response.raise_for_status()
+    except httpx.HTTPError:
+        # Log the failure but still return the generic message to the user
+        log.exception("Could not send password reset email")
+        
 @router.post("/request")
 def request_reset(body: ResetRequest, db: DbSession = Depends(get_db)):
     user = db.scalar(select(User).where(
