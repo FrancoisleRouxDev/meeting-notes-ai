@@ -26,6 +26,7 @@ export default function Layout() {
           <NavLink to="/meetings">Meetings</NavLink>
           <NavLink to="/meetings/new">New meeting</NavLink>
           <NavLink to="/items">Open items</NavLink>
+          <NavLink to="/account">Account</NavLink>
         </nav>
         <span className="muted">{user?.email}</span>
         <button onClick={() => logout.mutate()} disabled={logout.isPending}>

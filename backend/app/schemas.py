@@ -6,7 +6,7 @@ class MeetingUpdate(BaseModel):
     # only the fields the client send are changed.
     title: str | None = Field(default=None, min_length=1, max_length=200)
     summary: str | None = Field(default=None, max_length=2000)
-    decisions: list [str] | None = Field(default=None, max_legth=50)
+    decisions: list [str] | None = Field(default=None, max_length=50)
     
     @field_validator("title", "summary")
     @classmethod

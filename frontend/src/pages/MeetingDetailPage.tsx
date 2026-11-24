@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ApiError } from "../api";
+import { ShareToSlack } from "../components/ShareToSlack";
 import { useAddActionItem, useDeleteActionItem, useUpdateActionItem, useUpdateMeeting } from "../editing";
 import {
   useAnalyseMeeting,
@@ -87,6 +88,10 @@ export default function MeetingDetailPage() {
           {analyse.isPending ? "Analysing… this can take a minute" : label}
         </button>
       )}
+
+      <ShareToSlack meetingId={meetingId} />
+
+
 
       <MeetingNotes meeting={meeting} />
 
@@ -408,3 +413,6 @@ function AddActionItem({ meetingId }: { meetingId: number }) {
     </form>
   );
 }
+
+
+
