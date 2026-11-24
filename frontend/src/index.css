@@ -297,3 +297,29 @@ summary { cursor: pointer; font-weight: 600; margin-bottom: 0.5rem; }
 .meeting-list a:hover {
   opacity: 0.85,
 }
+
+.card {
+  background: var(--surface);
+  border: 1px solid (var--(--border));
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.25rem;
+}
+
+.card h2 {
+  margin-top: 0;
+}
+
+.card p:last-of-type {
+  margin-bottom: 0;
+}
+
+.danger-zone {
+  border-color: var(--error);
+}
+
+.account-email {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0.25rem 0 0;
+}
