@@ -15,5 +15,11 @@ class Settings(BaseSettings):
     # Free models can be slow, so allow time before reporting a failure.
     openrouter_timeout_seconds: float = 60.0
 
+    #password reset
+    public_app_url: str = "http://localhost:5173"
+    brevo_api_key: str | None = None
+    mail_from: str = ""
+    password_reset_dev_log: bool = True
+
 
 settings = Settings()

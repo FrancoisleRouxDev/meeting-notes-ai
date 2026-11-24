@@ -71,3 +71,12 @@ class ActionItem(Base):
     status: Mapped[str] = mapped_column(String(20), default="to do")
 
     meeting: Mapped[Meeting] = relationship(back_populates="action_items")
+    
+class PasswordResetToken(Base):
+    __tablename__ = "password_reset_tokens"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), index=True)
+    token_hash: Mapped[str] = mapped_column(String(64), unique=True)
+    expires_at: Mapped[datetime] = mapped_column(DateTime)
+    used_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    

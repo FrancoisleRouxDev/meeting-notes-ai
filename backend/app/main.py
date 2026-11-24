@@ -8,7 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from app import models  # noqa: F401  (registers the tables with SQLAlchemy)
 from app.core.config import settings
 from app.db import Base, engine
-from app.routers import action_items, auth, integrations, meetings
+from app.routers import action_items, auth, integrations, meetings, password_reset
 
 # Temporary shortcut to create tables. Alembic migrations replace this before submission.
 Base.metadata.create_all(bind=engine)
@@ -29,6 +29,7 @@ app.include_router(auth.router, prefix="/api")
 app.include_router(meetings.router, prefix="/api")
 app.include_router(action_items.router, prefix="/api")
 app.include_router(integrations.router, prefix="/api")
+app.include_router(password_reset.router, prefix="/api")
 
 
 @app.get("/health")
