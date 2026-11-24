@@ -1,21 +1,11 @@
 import httpx
-from pydantic_settings import BaseSettings, SettingsConfigDict
-
-
-class SlackSettings(BaseSettings):
-    # Read from the environment or backend/.env. The URL is a secret, so it never reaches the browser.
-    slack_webhook_url: str = ""
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
-
-
-slack_settings = SlackSettings()
 
 # Slack rejects messages over 40,000 characters. Stay well under that.
 MAX_MESSAGE_LENGTH = 35_000
 
 
 class SlackUnavailable(Exception):
-    """Slack is not configured, could not be reached, or refused the message."""
+    """Slack refused the message or could not be reached."""
 
 
 def _escape(text: str) -> str:
@@ -38,15 +28,11 @@ def build_message(meeting) -> str:
     return "\n".join(lines)[:MAX_MESSAGE_LENGTH]
 
 
-async def post_meeting_to_slack(meeting) -> None:
-    url = slack_settings.slack_webhook_url
-    if not url:
-        raise SlackUnavailable("Slack is not configured. Set SLACK_WEBHOOK_URL in backend/.env")
-
+async def post_meeting_to_slack(meeting, webhook_url: str) -> None:
     text = build_message(meeting)
     try:
         async with httpx.AsyncClient(timeout=10) as client:
-            response = await client.post(url, json={"text": text})
+            response = await client.post(webhook_url, json={"text": text})
     except httpx.HTTPError as exc:
         # The URL is never put in an error message, so it can't leak into logs or responses.
         raise SlackUnavailable("Could not reach Slack") from exc
