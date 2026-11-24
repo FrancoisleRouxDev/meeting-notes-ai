@@ -16,7 +16,7 @@
         "title": "Meeting Notes",
         "width": 1200,
         "height": 800,
-        "url": "http://localhost:8000"
+        "url": "https://meeting-notes-ai-nbv6.onrender.com"
       }
     ],
     "security": {
@@ -35,3 +35,4 @@
     ]
   }
 }
+
