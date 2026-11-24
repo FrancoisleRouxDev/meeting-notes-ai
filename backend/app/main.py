@@ -8,7 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from app import models  # noqa: F401  (registers the tables with SQLAlchemy)
 from app.core.config import settings
 from app.db import Base, engine
-from app.routers import action_items, auth, meetings
+from app.routers import action_items, auth, integrations, meetings
 
 # Temporary shortcut to create tables. Alembic migrations replace this before submission.
 Base.metadata.create_all(bind=engine)
@@ -28,6 +28,7 @@ app.add_middleware(
 app.include_router(auth.router, prefix="/api")
 app.include_router(meetings.router, prefix="/api")
 app.include_router(action_items.router, prefix="/api")
+app.include_router(integrations.router, prefix="/api")
 
 
 @app.get("/health")
@@ -52,3 +53,4 @@ if STATIC_DIR.is_dir():
         if full_path and candidate.is_file() and STATIC_DIR.resolve() in candidate.parents:
             return FileResponse(candidate)
         return FileResponse(STATIC_DIR / "index.html")
+

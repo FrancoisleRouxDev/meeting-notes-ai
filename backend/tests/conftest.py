@@ -1,10 +1,13 @@
 import os
 import tempfile
 
-# Point the app at a throwaway database before the app is imported.
+from cryptography.fernet import Fernet
+
+# Point the app at a throwaway database and a test encryption key before the app is imported.
 _test_dir = tempfile.mkdtemp()
 os.environ["DATABASE_URL"] = "sqlite:///" + os.path.join(_test_dir, "test.db").replace("\\", "/")
 os.environ["SESSION_COOKIE_SECURE"] = "false"
+os.environ["ENCRYPTION_KEY"] = Fernet.generate_key().decode()
 
 import pytest  # noqa: E402
 

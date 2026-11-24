@@ -61,3 +61,10 @@ export function useDeleteActionItem(meetingId: number) {
     onSuccess: () => refreshAll(queryClient, meetingId),
   });
 }
+
+export function useShareToSlack(meetingId: number) {
+  return useMutation({
+    mutationFn: () => api<{ sent: boolean }>(`/integrations/slack/share/${meetingId}`, { method: "POST" }),
+  });
+}
+
