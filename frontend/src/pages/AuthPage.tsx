@@ -73,6 +73,8 @@ export default function AuthPage({ mode }: Props) {
         ) : (
           <>
             No account yet? <Link to="/register">Register</Link>
+            <br />
+            <Link to="/forgot-password">Forgot password?</Link>
           </>
         )}
       </p>
