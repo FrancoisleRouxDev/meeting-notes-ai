@@ -22,6 +22,8 @@ describe("LandingPage", () => {
       screen.getByText(/turn a meeting transcript into a clear summary/i),
     ).toBeTruthy();
     expect(screen.getAllByRole("link", { name: /try it free|get started/i })).toHaveLength(2);
+    expect(screen.getByRole("link", { name: /download desktop app/i }).getAttribute("href"))
+      .toBe("https://github.com/FrancoisleRouxDev/meeting-notes-ai/releases/latest");
     expect(screen.getByRole("heading", { name: /from conversation to clear next steps/i }))
       .toBeTruthy();
   });

@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
 
+const LATEST_RELEASE_URL =
+  "https://github.com/FrancoisleRouxDev/meeting-notes-ai/releases/latest";
+
 const demoActions = [
   { task: "Send the revised proposal", owner: "Maya", due: "Fri, Nov 28", source: "Line 12" },
   { task: "Confirm the launch checklist", owner: "Ethan", due: "Not stated", source: "Line 18" },
@@ -18,6 +21,7 @@ export default function LandingPage() {
         <nav aria-label="Main navigation">
           <a href="#how-it-works">How it works</a>
           <a href="#why-meeting-notes">Why Meeting Notes</a>
+          <a href="#download">Desktop app</a>
         </nav>
         <div className="marketing-actions">
           <ThemeToggle />
@@ -98,6 +102,25 @@ export default function LandingPage() {
           <span>More confidence in what happens next</span>
           <i />
           <span>Built for humans to review</span>
+        </section>
+
+        <section className="desktop-download" id="download">
+          <div>
+            <p className="eyebrow">Take it with you</p>
+            <h2>Meeting follow-through, right on your desktop.</h2>
+            <p>
+              Download the app for Windows. It connects to your hosted account
+              and requires an internet connection.
+            </p>
+          </div>
+          <a
+            className="button"
+            href={LATEST_RELEASE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Download desktop app <span aria-hidden="true">↓</span>
+          </a>
         </section>
 
         <section className="how-section" id="how-it-works">
