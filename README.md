@@ -11,9 +11,12 @@ Built as a take-home challenge for Luckybeard's Launchpad programme.
 **Working now**
 
 - Register, log in, log out, and delete your account (soft delete)
-- Paste a transcript, or upload a `.txt`, `.vtt` or `.md` file
+- Paste a transcript, choose a file, or drag and drop a `.txt`, `.vtt` or `.md` file
+- Create a dated meeting without a transcript, then paste or upload it later from the meeting page
 - AI analysis: summary, decisions and action items, each validated before saving
 - Meeting list and detail pages, with the summary, decisions, transcript and action items
+- Calendar view for meeting dates and open action-item due dates, including overdue items; add meetings from a selected day
+- App-styled date picker on the meeting form, with calendar dates prefilled when adding from the calendar
 - Edit a meeting's title, summary and decisions
 - Edit each action item's text, owner, due date and status, tick items off, add items, and delete them
 - "My action items" page with filters for status, owner and overdue items
@@ -23,7 +26,7 @@ Built as a take-home challenge for Luckybeard's Launchpad programme.
 - System-aware light and dark themes, with a saved manual selection
 - Clickable action-item source links back to transcript lines
 - Encrypted Slack webhook integration for sharing meeting notes
-- Backend tests (44 passing) and frontend tests (3 passing)
+- Backend tests (50 passing) and frontend tests (9 passing)
 - Desktop app (Tauri) that opens the web app in a native window
 
 ## Product previews
@@ -40,9 +43,9 @@ The following mockups show the public landing page and the core meeting follow-u
 
 ## How it works
 
-1. Log in, then paste or upload a transcript with a title and date.
-2. The transcript is saved immediately, before any AI call.
-3. Run analysis. Three separate OpenRouter calls produce a summary, the decisions and the action items.
+1. Log in, then create a meeting with a title and date. Add its transcript now or attach it later.
+2. When provided, the transcript is saved immediately, before any AI call.
+3. When a transcript is available, run analysis. Three separate OpenRouter calls produce a summary, the decisions and the action items.
 4. Each response is validated against a schema. Owner, due-date and source values also need exact transcript quotes; dates are kept only when the quoted wording resolves to the returned date. Source quotes are mapped to transcript line numbers. If any part fails, nothing is saved, and the meeting is marked `failed` so you can retry. The transcript is never lost.
 5. Analysis runs once per meeting. Running it again would overwrite edits made later, so the API returns 409 instead.
 6. Edits and action item changes are saved as you make them. Only your own meetings and items are visible.
@@ -53,7 +56,7 @@ The following mockups show the public landing page and the core meeting follow-u
 |---|---|---|
 | Frontend | React, TypeScript, Vite | Typed UI with a fast dev server |
 | Data fetching | TanStack Query | Loading, error and retry states handled consistently |
-| Routing | React Router | Meetings, meeting detail, open items and account pages |
+| Routing | React Router | Meetings, calendar, meeting detail, open items and account pages |
 | Backend | Python, FastAPI | Quick to build, with interactive API docs at `/docs` |
 | Validation | Pydantic v2 | Validates requests, and defines the schema the AI output must match |
 | Database | SQLite (development), PostgreSQL on Supabase (production), SQLAlchemy 2.0 | No setup for reviewers locally; a hosted Postgres database for the live app |

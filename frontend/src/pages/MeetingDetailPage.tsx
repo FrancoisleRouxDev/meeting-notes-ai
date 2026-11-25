@@ -5,6 +5,7 @@ import { ShareToSlack } from "../components/ShareToSlack";
 import { useAddActionItem, useDeleteActionItem, useUpdateActionItem, useUpdateMeeting } from "../editing";
 import {
   useAnalyseMeeting,
+  useAttachTranscript,
   useDeleteMeeting,
   useMeeting,
   type ActionItem,
@@ -78,6 +79,7 @@ export default function MeetingDetailPage() {
   }
 
   const label = meeting.analysis_status === "failed" ? "Try analysis again" : "Analyse transcript";
+  const analysisLabel = meeting.transcript ? statusLabels[meeting.analysis_status] : "Transcript needed";
 
   return (
     <main>
@@ -86,10 +88,10 @@ export default function MeetingDetailPage() {
       </p>
       <h1>{meeting.title}</h1>
       <p className="muted">
-        {meeting.meeting_date} · <span className="badge">{statusLabels[meeting.analysis_status]}</span>
+        {meeting.meeting_date} · <span className="badge">{analysisLabel}</span>
       </p>
 
-      {meeting.analysis_status === "failed" && (
+      {meeting.transcript && meeting.analysis_status === "failed" && (
         <p role="alert" className="error">
           The last analysis failed ({meeting.analysis_error}). Your transcript is safe, so you can try again.
         </p>
@@ -97,13 +99,15 @@ export default function MeetingDetailPage() {
       {analyse.isError && <p role="alert" className="error">{analyse.error.message}</p>}
       {remove.isError && <p role="alert" className="error">{remove.error.message}</p>}
 
-      {meeting.analysis_status !== "done" && (
+      {!meeting.transcript && <AddTranscript meetingId={meetingId} />}
+
+      {meeting.transcript && meeting.analysis_status !== "done" && (
         <button onClick={() => analyse.mutate()} disabled={analyse.isPending}>
           {analyse.isPending ? "Analysing… this can take a minute" : label}
         </button>
       )}
 
-      <ShareToSlack meetingId={meetingId} />
+      {meeting.transcript && <ShareToSlack meetingId={meetingId} />}
 
 
 
@@ -116,24 +120,26 @@ export default function MeetingDetailPage() {
         onSourceClick={() => setSourceJumpRequest((request) => request + 1)}
       />
 
-      <details ref={transcriptDetails}>
-        <summary>Transcript</summary>
-        <pre className="transcript">
-          {meeting.transcript.split(/\r\n|\r|\n/).map((line, index) => {
-            const lineNumber = index + 1;
-            return (
-              <span
-                id={`transcript-line-${lineNumber}`}
-                className={`transcript-line${sourceLineToShow === lineNumber ? " highlighted" : ""}`}
-                key={lineNumber}
-              >
-                <span className="transcript-line-number" aria-hidden="true">{lineNumber}</span>
-                {line || " "}
-              </span>
-            );
-          })}
-        </pre>
-      </details>
+      {meeting.transcript && (
+        <details ref={transcriptDetails}>
+          <summary>Transcript</summary>
+          <pre className="transcript">
+            {meeting.transcript.split(/\r\n|\r|\n/).map((line, index) => {
+              const lineNumber = index + 1;
+              return (
+                <span
+                  id={`transcript-line-${lineNumber}`}
+                  className={`transcript-line${sourceLineToShow === lineNumber ? " highlighted" : ""}`}
+                  key={lineNumber}
+                >
+                  <span className="transcript-line-number" aria-hidden="true">{lineNumber}</span>
+                  {line || " "}
+                </span>
+              );
+            })}
+          </pre>
+        </details>
+      )}
 
       <section>
         <button className="danger" onClick={handleDelete} disabled={remove.isPending}>
@@ -141,6 +147,84 @@ export default function MeetingDetailPage() {
         </button>
       </section>
     </main>
+  );
+}
+
+function AddTranscript({ meetingId }: { meetingId: number }) {
+  const attach = useAttachTranscript(meetingId);
+  const [transcript, setTranscript] = useState("");
+  const [file, setFile] = useState<File | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
+  const fileInput = useRef<HTMLInputElement>(null);
+
+  function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (attach.isPending) return;
+    if (file && transcript.trim()) {
+      setFormError("Paste a transcript or upload a file, not both.");
+      return;
+    }
+    if (file) {
+      setFormError(null);
+      attach.mutate({ file });
+      return;
+    }
+    if (!transcript.trim()) {
+      setFormError("Paste a transcript or choose a file.");
+      return;
+    }
+    setFormError(null);
+    attach.mutate({ transcript: transcript.trim() });
+  }
+
+  return (
+    <section className="card">
+      <h2>Add transcript</h2>
+      <p className="muted">This meeting is saved. Add its transcript now or whenever it is ready.</p>
+      <form onSubmit={submit}>
+        <label>
+          Paste transcript
+          <textarea
+            rows={8}
+            value={transcript}
+            onChange={(event) => setTranscript(event.target.value)}
+            placeholder="Paste the transcript here"
+            disabled={attach.isPending}
+          />
+        </label>
+        <label>
+          Or upload a file (.txt, .vtt, .md)
+          <input
+            ref={fileInput}
+            type="file"
+            accept=".txt,.vtt,.md"
+            disabled={attach.isPending}
+            onChange={(event) => setFile(event.target.files?.[0] ?? null)}
+          />
+        </label>
+        {file && (
+          <div className="selected-file">
+            <span>Selected: {file.name}</span>
+            <button
+              type="button"
+              className="button-quiet file-remove"
+              disabled={attach.isPending}
+              onClick={() => {
+                setFile(null);
+                if (fileInput.current) fileInput.current.value = "";
+              }}
+            >
+              Remove
+            </button>
+          </div>
+        )}
+        {formError && <p role="alert" className="error">{formError}</p>}
+        {attach.isError && <p role="alert" className="error">{errorText(attach.error, "Could not attach the transcript")}</p>}
+        <button type="submit" disabled={attach.isPending}>
+          {attach.isPending ? "Adding transcript…" : "Add transcript"}
+        </button>
+      </form>
+    </section>
   );
 }
 

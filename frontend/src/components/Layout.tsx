@@ -29,6 +29,7 @@ export default function Layout() {
         </Link>
         <nav aria-label="Application navigation">
           <NavLink to="/meetings">Meetings</NavLink>
+          <NavLink to="/calendar">Calendar</NavLink>
           <NavLink to="/meetings/new">New meeting</NavLink>
           <NavLink to="/items">Open items</NavLink>
           <NavLink to="/account">Account</NavLink>

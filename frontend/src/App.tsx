@@ -10,6 +10,7 @@ import AccountPage from "./pages/AccountPage";
 import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
 import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 import LandingPage from "./pages/LandingPage";
+import CalendarPage from "./pages/CalendarPage";
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
       <Route element={<RequireAuth />}>
         <Route element={<Layout />}>
           <Route path="/meetings" element={<MeetingsPage />} />
+          <Route path="/calendar" element={<CalendarPage />} />
           <Route path="/meetings/new" element={<NewMeetingPage />} />
           <Route path="/meetings/:id" element={<MeetingDetailPage />} />
           <Route path="/items" element={<OpenItemsPage />} />

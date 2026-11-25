@@ -35,4 +35,6 @@ def test_upgrade_builds_or_adopts_database(tmp_path, monkeypatch, existing_schem
     assert "source_line" in {
         column["name"] for column in inspector.get_columns("action_items")
     }
+    transcript = next(column for column in inspector.get_columns("meetings") if column["name"] == "transcript")
+    assert transcript["nullable"] is True
     engine.dispose()

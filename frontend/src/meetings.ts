@@ -18,7 +18,7 @@ export type ActionItem = {
 };
 
 export type MeetingDetail = MeetingSummary & {
-  transcript: string;
+  transcript: string | null;
   summary: string | null;
   decisions: string[] | null;
   analysis_status: "pending" | "done" | "failed";
@@ -26,7 +26,7 @@ export type MeetingDetail = MeetingSummary & {
   action_items: ActionItem[];
 };
 
-export type NewMeeting = { title: string; meeting_date: string; transcript: string };
+export type NewMeeting = { title: string; meeting_date: string; transcript?: string };
 
 export function useMeetings() {
   return useQuery({
@@ -62,6 +62,30 @@ export function useUploadMeeting() {
       return api<MeetingDetail>("/meetings/upload", { method: "POST", body: form });
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["meetings"] }),
+  });
+}
+
+export function useAttachTranscript(meetingId: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (source: { transcript: string } | { file: File }) => {
+      if ("file" in source) {
+        const form = new FormData();
+        form.append("file", source.file);
+        return api<MeetingDetail>(`/meetings/${meetingId}/transcript/upload`, {
+          method: "POST",
+          body: form,
+        });
+      }
+      return api<MeetingDetail>(`/meetings/${meetingId}/transcript`, {
+        method: "POST",
+        body: JSON.stringify(source),
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["meetings", meetingId] });
+      queryClient.invalidateQueries({ queryKey: ["meetings"] });
+    },
   });
 }
 

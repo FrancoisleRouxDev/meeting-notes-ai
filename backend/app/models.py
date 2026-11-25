@@ -43,7 +43,7 @@ class Meeting(Base):
     title: Mapped[str] = mapped_column(String(200))
     meeting_date: Mapped[date] = mapped_column(Date)
     # Stored exactly as received, before any AI call. If the AI fails, the transcript is still here.
-    transcript: Mapped[str] = mapped_column(Text)
+    transcript: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
     # AI results. Only written when the whole analysis succeeds, so a failed run never leaves partial data.

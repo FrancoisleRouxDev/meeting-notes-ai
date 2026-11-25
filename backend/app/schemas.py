@@ -88,12 +88,31 @@ class MeetingCreate(BaseModel):
     title: str = Field(min_length=1, max_length=200)
     meeting_date: date
     # 200,000 characters is roughly 30,000 words, far longer than a normal meeting.
+    transcript: str | None = Field(default=None, max_length=200_000)
+
+    @field_validator("title")
+    @classmethod
+    def title_not_blank(cls, value: str) -> str:
+        value = value.strip()
+        if not value:
+            raise ValueError("must not be blank")
+        return value
+
+    @field_validator("transcript")
+    @classmethod
+    def clean_optional_transcript(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        value = value.strip()
+        return value or None
+
+
+class MeetingTranscript(BaseModel):
     transcript: str = Field(min_length=1, max_length=200_000)
 
-    @field_validator("title", "transcript")
+    @field_validator("transcript")
     @classmethod
-    def not_blank(cls, value: str) -> str:
-        # min_length passes for "   ", so whitespace-only input is rejected here.
+    def transcript_not_blank(cls, value: str) -> str:
         value = value.strip()
         if not value:
             raise ValueError("must not be blank")
@@ -122,7 +141,7 @@ class ActionItemOut(BaseModel):
 
 
 class MeetingDetail(MeetingOut):
-    transcript: str
+    transcript: str | None
     summary: str | None
     decisions: list[str] | None
     analysis_status: str

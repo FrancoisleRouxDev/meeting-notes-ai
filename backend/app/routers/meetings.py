@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from app.core.deps import get_current_user
 from app.db import get_db
 from app.models import ActionItem, Meeting, User
-from app.schemas import MeetingCreate, MeetingDetail, MeetingOut, MeetingUpdate
+from app.schemas import MeetingCreate, MeetingDetail, MeetingOut, MeetingTranscript, MeetingUpdate
 from app.services.ai import (
     AIInvalidOutput,
     AIUnavailable,
@@ -30,7 +30,9 @@ def _get_owned_meeting(meeting_id: int, user: User, db: Session) -> Meeting:
     return meeting
 
 
-def _save_meeting(title: str, meeting_date: date, transcript: str, user: User, db: Session) -> Meeting:
+def _save_meeting(
+    title: str, meeting_date: date, transcript: str | None, user: User, db: Session
+) -> Meeting:
     # user_id comes from the logged-in session, never from the request body.
     meeting = Meeting(user_id=user.id, title=title, meeting_date=meeting_date, transcript=transcript)
     db.add(meeting)
@@ -46,6 +48,42 @@ def create_meeting(
     db: Session = Depends(get_db),
 ):
     return _save_meeting(body.title, body.meeting_date, body.transcript, user, db)
+
+
+def _attach_transcript(meeting: Meeting, transcript: str, db: Session) -> Meeting:
+    if meeting.transcript is not None:
+        raise HTTPException(status_code=409, detail="This meeting already has a transcript")
+    meeting.transcript = transcript
+    meeting.analysis_status = "pending"
+    meeting.analysis_error = None
+    db.commit()
+    db.refresh(meeting)
+    return meeting
+
+
+@router.post("/{meeting_id}/transcript", response_model=MeetingDetail)
+def attach_transcript(
+    meeting_id: int,
+    body: MeetingTranscript,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    meeting = _get_owned_meeting(meeting_id, user, db)
+    return _attach_transcript(meeting, body.transcript, db)
+
+
+@router.post("/{meeting_id}/transcript/upload", response_model=MeetingDetail)
+async def upload_meeting_transcript(
+    meeting_id: int,
+    file: UploadFile = File(),
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    meeting = _get_owned_meeting(meeting_id, user, db)
+    transcript = (await read_transcript_upload(file)).strip()
+    if not transcript:
+        raise HTTPException(status_code=422, detail="Transcript must not be blank")
+    return _attach_transcript(meeting, transcript, db)
 
 
 @router.post("/upload", response_model=MeetingDetail, status_code=201)
@@ -86,6 +124,8 @@ async def analyse_meeting(
     db: Session = Depends(get_db),
 ):
     meeting = _get_owned_meeting(meeting_id, user, db)
+    if not meeting.transcript:
+        raise HTTPException(status_code=409, detail="Add a transcript before analysing this meeting")
     if meeting.analysis_status == "done":
         # Re-running would replace action items the user may have already edited.
         raise HTTPException(status_code=409, detail="This meeting has already been analysed")
