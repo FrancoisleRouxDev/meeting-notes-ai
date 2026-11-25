@@ -6,6 +6,7 @@ export type OpenItem = {
   text: string;
   owner: string | null;
   due_date: string | null;
+  source_line: number | null;
   status: string;
   meeting_id: number;
   meeting_title: string;
