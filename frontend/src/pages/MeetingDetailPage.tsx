@@ -1,5 +1,5 @@
-import { useState, type FormEvent } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { ApiError } from "../api";
 import { ShareToSlack } from "../components/ShareToSlack";
 import { useAddActionItem, useDeleteActionItem, useUpdateActionItem, useUpdateMeeting } from "../editing";
@@ -27,10 +27,24 @@ export default function MeetingDetailPage() {
   const { id } = useParams();
   const meetingId = Number(id);
   const navigate = useNavigate();
+  const location = useLocation();
+  const [sourceJumpRequest, setSourceJumpRequest] = useState(0);
+  const transcriptDetails = useRef<HTMLDetailsElement>(null);
+  const sourceLineMatch = /^#transcript-line-(\d+)$/.exec(location.hash);
+  const sourceLineToShow = sourceLineMatch ? Number(sourceLineMatch[1]) : null;
 
   const { data: meeting, isPending, isError, error } = useMeeting(meetingId);
   const analyse = useAnalyseMeeting(meetingId);
   const remove = useDeleteMeeting();
+
+  useEffect(() => {
+    if (meeting && sourceLineToShow !== null && transcriptDetails.current) {
+      transcriptDetails.current.open = true;
+      document
+        .getElementById(`transcript-line-${sourceLineToShow}`)
+        ?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [meeting, sourceJumpRequest, sourceLineToShow]);
 
   if (isPending) {
     return (
@@ -99,11 +113,26 @@ export default function MeetingDetailPage() {
         meetingId={meetingId}
         items={meeting.action_items}
         analysisDone={meeting.analysis_status === "done"}
+        onSourceClick={() => setSourceJumpRequest((request) => request + 1)}
       />
 
-      <details>
+      <details ref={transcriptDetails}>
         <summary>Transcript</summary>
-        <pre className="transcript">{meeting.transcript}</pre>
+        <pre className="transcript">
+          {meeting.transcript.split(/\r\n|\r|\n/).map((line, index) => {
+            const lineNumber = index + 1;
+            return (
+              <span
+                id={`transcript-line-${lineNumber}`}
+                className={`transcript-line${sourceLineToShow === lineNumber ? " highlighted" : ""}`}
+                key={lineNumber}
+              >
+                <span className="transcript-line-number" aria-hidden="true">{lineNumber}</span>
+                {line || " "}
+              </span>
+            );
+          })}
+        </pre>
       </details>
 
       <section>
@@ -219,10 +248,12 @@ function ActionItems({
   meetingId,
   items,
   analysisDone,
+  onSourceClick,
 }: {
   meetingId: number;
   items: ActionItem[];
   analysisDone: boolean;
+  onSourceClick: () => void;
 }) {
   return (
     <section>
@@ -234,7 +265,12 @@ function ActionItems({
       ) : (
         <ul className="action-items">
           {items.map((item) => (
-            <ActionItemRow key={item.id} meetingId={meetingId} item={item} />
+            <ActionItemRow
+              key={item.id}
+              meetingId={meetingId}
+              item={item}
+              onSourceClick={onSourceClick}
+            />
           ))}
         </ul>
       )}
@@ -243,7 +279,15 @@ function ActionItems({
   );
 }
 
-function ActionItemRow({ meetingId, item }: { meetingId: number; item: ActionItem }) {
+function ActionItemRow({
+  meetingId,
+  item,
+  onSourceClick,
+}: {
+  meetingId: number;
+  item: ActionItem;
+  onSourceClick: () => void;
+}) {
   const update = useUpdateActionItem(meetingId);
   const remove = useDeleteActionItem(meetingId);
   const [editing, setEditing] = useState(false);
@@ -341,6 +385,16 @@ function ActionItemRow({ meetingId, item }: { meetingId: number; item: ActionIte
       />
       <div className="action-body">
         <span className={item.status === "done" ? "done-text" : undefined}>{item.text}</span>
+        {item.source_line !== null && (
+          <div>
+            <Link
+              to={`/meetings/${meetingId}#transcript-line-${item.source_line}`}
+              onClick={onSourceClick}
+            >
+              Transcript line {item.source_line}
+            </Link>
+          </div>
+        )}
         <span className="muted">
           {" "}· Owner: {item.owner ?? "not stated"} · Due: {item.due_date ?? "not stated"} · {item.status}
         </span>

@@ -27,13 +27,21 @@ def fake_ai(items):
     return _call
 
 
-def item(text, owner=None, due_date=None, owner_evidence=None, due_date_evidence=None):
+def item(
+    text,
+    owner=None,
+    due_date=None,
+    owner_evidence=None,
+    due_date_evidence=None,
+    source_evidence=None,
+) -> AIActionItem:
     return AIActionItem(
         text=text,
         owner=owner,
         owner_evidence=owner_evidence,
         due_date=due_date,
         due_date_evidence=due_date_evidence,
+        source_evidence=source_evidence,
     )
 
 
@@ -42,15 +50,43 @@ def analyse(client, meeting_id):
 
 
 def test_analysis_saves_summary_decisions_and_items(alice, ai_configured, monkeypatch):
-    monkeypatch.setattr(ai, "_call", fake_ai([item("Send the report", None)]))
-    meeting = new_meeting(alice)
+    monkeypatch.setattr(
+        ai,
+        "_call",
+        fake_ai([item("Send the report", source_evidence="Ann: I will send the report.")]),
+    )
+    meeting = new_meeting(
+        alice,
+        transcript="Weekly sync\nAnn: I will send the report.\n",
+    )
     response = analyse(alice, meeting["id"])
     assert response.status_code == 200, response.text
     body = alice.get(f"/api/meetings/{meeting['id']}").json()
     assert body["analysis_status"] == "done"
     assert body["summary"] == "A short summary."
     assert body["decisions"] == ["Ship on Monday"]
-    assert [i["text"] for i in body["action_items"]] == ["Send the report"]
+    assert len(body["action_items"]) == 1
+    assert body["action_items"][0]["text"] == "Send the report"
+    assert body["action_items"][0]["source_line"] == 2
+
+
+def test_invalid_source_quote_is_not_saved_as_a_line(alice, ai_configured, monkeypatch):
+    monkeypatch.setattr(
+        ai,
+        "_call",
+        fake_ai([item("Send the report", source_evidence="An invented transcript quote.")]),
+    )
+    meeting = new_meeting(alice)
+
+    response = analyse(alice, meeting["id"])
+    assert response.status_code == 200, response.text
+    assert response.json()["action_items"][0]["source_line"] is None
+
+
+def test_source_evidence_maps_to_line_number_across_line_endings():
+    assert ai.source_line_for_evidence(
+        "Agenda\r\nAnn: I will send the report.\r\n", "Ann: I will send the report."
+    ) == 2
 
 
 def test_owner_is_kept_only_when_named_in_transcript(alice, ai_configured, monkeypatch):

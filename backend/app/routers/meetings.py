@@ -8,7 +8,12 @@ from app.core.deps import get_current_user
 from app.db import get_db
 from app.models import ActionItem, Meeting, User
 from app.schemas import MeetingCreate, MeetingDetail, MeetingOut, MeetingUpdate
-from app.services.ai import AIInvalidOutput, AIUnavailable, analyse_transcript
+from app.services.ai import (
+    AIInvalidOutput,
+    AIUnavailable,
+    analyse_transcript,
+    source_line_for_evidence,
+)
 from app.services.transcript import read_transcript_upload
 
 router = APIRouter(prefix="/meetings", tags=["meetings"])
@@ -105,6 +110,7 @@ async def analyse_meeting(
                 text=item.text,
                 owner=item.owner,
                 due_date=item.due_date,
+                source_line=source_line_for_evidence(meeting.transcript, item.source_evidence),
             )
         )
     db.commit()

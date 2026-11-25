@@ -61,7 +61,15 @@ export default function OpenItemsPage() {
                 Owner: {item.owner ?? "not stated"} | Due: {item.due_date ?? "not stated"} |{" "}
                 <span className="badge">{item.status}</span>
               </p>
-              <Link to={`/meetings/${item.meeting_id}`}>{item.meeting_title}</Link>
+              <Link
+                to={`/meetings/${item.meeting_id}${
+                  item.source_line === null ? "" : `#transcript-line-${item.source_line}`
+                }`}
+              >
+                {item.source_line === null
+                  ? item.meeting_title
+                  : `${item.meeting_title} · Transcript line ${item.source_line}`}
+              </Link>
             </li>
           ))}
         </ul>

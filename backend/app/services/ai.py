@@ -63,6 +63,8 @@ PROMPTS = {
         "never the date of a meeting or event it mentions. "
         "For a non-null due_date, include due_date_evidence as an exact, contiguous quote from the transcript "
         "that states this task's deadline; otherwise set both due_date and due_date_evidence to null. "
+        "Include source_evidence as a short, exact, contiguous transcript quote that supports the task. "
+        "If you cannot quote the transcript exactly, set source_evidence to null. "
         "If a task is to chase or follow up something that has a stated deadline, that deadline is the "
         "task's due_date. Example: 'Thabo, chase the security questionnaire, it was due on the 9th' gives "
         "owner 'Thabo', text 'Chase the security questionnaire', and due_date for the 9th. "
@@ -177,6 +179,23 @@ def _owner_is_supported(owner: str, evidence: str, transcript: str) -> bool:
     ) is not None
 
 
+def source_line_for_evidence(transcript: str, evidence: str | None) -> int | None:
+    if not evidence:
+        return None
+
+    evidence_offset = transcript.find(evidence)
+    if evidence_offset == -1:
+        return None
+
+    offset = 0
+    for line_number, line in enumerate(transcript.splitlines(keepends=True), start=1):
+        if evidence_offset < offset + len(line):
+            return line_number
+        offset += len(line)
+
+    return 1 if evidence_offset == 0 else None
+
+
 def _ground_action_items(items: AIActionItems, transcript: str, meeting_date: date) -> None:
     for item in items.action_items:
         if item.owner and (
@@ -193,6 +212,9 @@ def _ground_action_items(items: AIActionItems, transcript: str, meeting_date: da
                 or _dates_in_evidence(evidence, meeting_date) != {item.due_date}
             ):
                 item.due_date = None
+
+        if item.source_evidence and item.source_evidence not in transcript:
+            item.source_evidence = None
 
 
 async def analyse_transcript(transcript: str, meeting_date: date):

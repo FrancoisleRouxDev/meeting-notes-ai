@@ -13,6 +13,7 @@ export type ActionItem = {
   text: string;
   owner: string | null;
   due_date: string | null;
+  source_line: number | null;
   status: string;
 };
 

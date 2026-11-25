@@ -117,6 +117,7 @@ class ActionItemOut(BaseModel):
     text: str
     owner: str | None
     due_date: date | None
+    source_line: int | None
     status: str
 
 
@@ -151,6 +152,7 @@ class AIActionItem(BaseModel):
     owner_evidence: str | None = Field(default=None, max_length=500)
     due_date: date | None = None
     due_date_evidence: str | None = Field(default=None, max_length=500)
+    source_evidence: str | None = Field(default=None, max_length=500)
 
 
 class AIActionItems(BaseModel):
