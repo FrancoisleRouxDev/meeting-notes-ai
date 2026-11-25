@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import PasswordInput from "../components/PasswordInput";
 
 export function ResetPasswordPage() {
   const [params] = useSearchParams();
@@ -59,16 +60,22 @@ export function ResetPasswordPage() {
     <main className="auth-page">
       <h1>Choose a new password</h1>
       <form onSubmit={submit}>
-        <label>
-          New password
-          <input type="password" required minLength={10} value={password}
-            onChange={(e) => setPassword(e.target.value)} />
-        </label>
-        <label>
-          Confirm password
-          <input type="password" required minLength={10} value={confirm}
-            onChange={(e) => setConfirm(e.target.value)} />
-        </label>
+        <PasswordInput
+          label="New password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          autoComplete="new-password"
+          required
+          minLength={10}
+        />
+        <PasswordInput
+          label="Confirm password"
+          value={confirm}
+          onChange={(e) => setConfirm(e.target.value)}
+          autoComplete="new-password"
+          required
+          minLength={10}
+        />
         {error && <p className="error">{error}</p>}
         <button type="submit" disabled={busy}>
           {busy ? "Saving…" : "Set new password"}
