@@ -4,7 +4,8 @@ A web app where you paste or upload a meeting transcript and get back a summary,
 
 Built as a take-home challenge for Luckybeard's Launchpad programme.
 
-**Live app:** [LIVE_URL]
+**Live app:** https://meeting-notes-ai-nbv6.onrender.com/login
+
 
 ## Status
 
