@@ -5,3 +5,5 @@ node_modules/
 dist/
 backend/static/
 !desktop/dist/
+backend/.env.production
+backend/app.db
