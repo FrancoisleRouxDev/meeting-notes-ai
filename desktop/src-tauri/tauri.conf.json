@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "desktop",
+  "productName": "Meeting Notes AI",
   "version": "0.1.0",
   "identifier": "com.flr21.desktop",
   "build": {
@@ -16,7 +16,7 @@
         "title": "Meeting Notes",
         "width": 1200,
         "height": 800,
-        "url": "https://meeting-notes-ai-nbv6.onrender.com"
+        "url": "https://meeting-notes-ai-nbv6.onrender.com/meetings"
       }
     ],
     "security": {

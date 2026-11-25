@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { api } from "../api";
 import { useMe } from "../auth";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Layout() {
   const { data: user } = useMe();
@@ -21,14 +22,19 @@ export default function Layout() {
   return (
     <>
       <header className="topbar">
-        <Link to="/meetings" className="brand">Meeting Notes</Link>
-        <nav>
+        <Link to="/meetings" className="brand">
+          <span className="brand-mark" aria-hidden="true">m</span>
+          <span>meeting<span className="brand-light">notes</span></span>
+          <span className="brand-ai">AI</span>
+        </Link>
+        <nav aria-label="Application navigation">
           <NavLink to="/meetings">Meetings</NavLink>
           <NavLink to="/meetings/new">New meeting</NavLink>
           <NavLink to="/items">Open items</NavLink>
           <NavLink to="/account">Account</NavLink>
         </nav>
         <span className="muted">{user?.email}</span>
+        <ThemeToggle />
         <button onClick={() => logout.mutate()} disabled={logout.isPending}>
           Log out
         </button>

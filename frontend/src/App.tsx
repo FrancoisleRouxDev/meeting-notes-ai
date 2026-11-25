@@ -9,10 +9,12 @@ import OpenItemsPage from "./pages/OpenItemsPage";
 import AccountPage from "./pages/AccountPage";
 import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
 import { ResetPasswordPage } from "./pages/ResetPasswordPage";
+import LandingPage from "./pages/LandingPage";
 
 export default function App() {
   return (
     <Routes>
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<AuthPage mode="login" />} />
       <Route path="/register" element={<AuthPage mode="register" />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />}></Route>
@@ -26,7 +28,7 @@ export default function App() {
           <Route path="/account" element={<AccountPage />} />
         </Route>
       </Route>
-      <Route path="*" element={<Navigate to="/meetings" replace />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import PasswordInput from "../components/PasswordInput";
+import ThemeToggle from "../components/ThemeToggle";
 
 export function ResetPasswordPage() {
   const [params] = useSearchParams();
@@ -41,6 +42,7 @@ export function ResetPasswordPage() {
   if (!token) {
     return (
       <main className="auth-page">
+        <ThemeToggle />
         <p>This reset link is missing its token. Request a new one.</p>
         <Link to="/forgot-password">Forgot password</Link>
       </main>
@@ -50,6 +52,7 @@ export function ResetPasswordPage() {
   if (done) {
     return (
       <main className="auth-page">
+        <ThemeToggle />
         <p>Your password has been updated.</p>
         <Link to="/login">Log in</Link>
       </main>
@@ -58,6 +61,7 @@ export function ResetPasswordPage() {
 
   return (
     <main className="auth-page">
+      <ThemeToggle />
       <h1>Choose a new password</h1>
       <form onSubmit={submit}>
         <PasswordInput

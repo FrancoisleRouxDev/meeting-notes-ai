@@ -2,6 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "../api";
+import ThemeToggle from "../components/ThemeToggle";
 import type { User } from "../auth";
 import PasswordInput from "../components/PasswordInput";
 
@@ -37,8 +38,21 @@ export default function AuthPage({ mode }: Props) {
   }
 
   return (
-    <main>
-      <h1>{isRegister ? "Create account" : "Log in"}</h1>
+    <div className="auth-page">
+      <ThemeToggle />
+      <Link to="/" className="brand auth-brand">
+        <span className="brand-mark" aria-hidden="true">m</span>
+        <span>meeting<span className="brand-light">notes</span></span>
+        <span className="brand-ai">AI</span>
+      </Link>
+      <main className="auth-card">
+        <p className="eyebrow">{isRegister ? "A calmer way to follow up" : "Welcome back"}</p>
+        <h1>{isRegister ? "Create your account" : "Pick up where you left off."}</h1>
+        <p className="auth-description">
+          {isRegister
+            ? "Keep the important details from every meeting—and make the next steps easy to find."
+            : "Your meeting notes and next steps are right where you left them."}
+        </p>
       <form onSubmit={handleSubmit} noValidate>
         <label>
           Email
@@ -89,6 +103,8 @@ export default function AuthPage({ mode }: Props) {
           </>
         )}
       </p>
-    </main>
+      </main>
+      <p className="auth-footer">Your transcript stays yours. Your AI notes stay editable.</p>
+    </div>
   );
 }

@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
+import ThemeToggle from "../components/ThemeToggle";
 
 export function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -29,6 +30,7 @@ export function ForgotPasswordPage() {
 
   return (
     <main className="auth-page">
+      <ThemeToggle />
       <h1>Forgot password</h1>
       {message ? (
         <p>{message}</p>
