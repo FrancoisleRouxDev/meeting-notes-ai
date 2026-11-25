@@ -19,7 +19,7 @@ Built as a take-home challenge for Luckybeard's Launchpad programme.
 - "My action items" page with filters for status, owner and overdue items
 - Delete a meeting, with explicit confirmation
 - Account page with account deletion
-- Backend tests (29 passing)
+- Backend tests (40 passing)
 - Desktop app (Tauri) that opens the web app in a native window
 
 **Not built yet**
@@ -33,7 +33,7 @@ Built as a take-home challenge for Luckybeard's Launchpad programme.
 1. Log in, then paste or upload a transcript with a title and date.
 2. The transcript is saved immediately, before any AI call.
 3. Run analysis. Three separate OpenRouter calls produce a summary, the decisions and the action items.
-4. Each response is validated against a schema. If any part fails, nothing is saved, and the meeting is marked `failed` so you can retry. The transcript is never lost.
+4. Each response is validated against a schema. Owner and due-date values also need exact transcript quotes; dates are kept only when the quoted wording resolves to the returned date. If any part fails, nothing is saved, and the meeting is marked `failed` so you can retry. The transcript is never lost.
 5. Analysis runs once per meeting. Running it again would overwrite edits made later, so the API returns 409 instead.
 6. Edits and action item changes are saved as you make them. Only your own meetings and items are visible.
 
@@ -92,7 +92,12 @@ Open http://127.0.0.1:8000/docs. Every endpoint can be tried there. Register fir
 
 Registration, meetings and the open items view work without an OpenRouter key. Analysis returns a 503 until the key and model are set.
 
-To load two demo users (`demo1@example.com` and `demo2@example.com`, with the passwords in `backend/seed.py`), run `python seed.py` from the `backend` folder.
+To create two demo users, run `python seed.py` from the `backend` folder. It only creates missing accounts and does not change existing passwords. These credentials are for the demo only:
+
+| Email | Password |
+|---|---|
+| `demo1@example.com` | `LaunchPadDemo1!` |
+| `demo2@example.com` | `LaunchPadDemo2!` |
 
 ### 3. Start the frontend
 
@@ -195,15 +200,15 @@ All routes are under `/api`. The full list, with request bodies, is in `/docs`.
 - **Soft delete for accounts, hard delete for meetings.** The brief asks for soft delete on accounts. Deleting a meeting is permanent, and needs `confirm=true` so a stray request can't remove one.
 - **Transcript first.** The transcript is saved before any AI call, so a failed analysis never loses it.
 - **One call per output.** Three focused prompts, each with its own schema, instead of one large prompt. Each response is validated before anything is saved.
-- **Owner guard.** An owner is only saved if the name appears in the transcript.
+- **Evidence guard.** An owner is only saved if an exact transcript quote names them, and a due date is only saved if an exact quote resolves to that date. Unsupported date wording is left blank.
 - **Analysis runs once.** Re-running would overwrite edits made later, so a completed meeting returns 409.
 - **Manual editing after analysis.** The AI output is a starting point. Every field can be corrected by hand, and corrections are never overwritten by a later analysis.
 
 ## Known limitations
 
 - A deleted account's email stays reserved, so nobody can register with it again. This is a simplification, not a requirement.
-- The owner guard is a case-insensitive text match, so a short name could match inside a longer word.
-- The app doesn't check relative dates such as "Friday". It relies on the model to work them out from the meeting date.
+- Date evidence currently recognizes ISO dates, month-and-day dates, day-of-month dates, weekdays, and simple relative dates. Unsupported or ambiguous date wording is left blank.
+- Weekday references are resolved from the meeting date; ambiguous phrases such as "end of next week" are left blank.
 - Free model output varies between runs. Testing showed missed items and occasional wrong dates, so output is checked and should be reviewed, but it isn't guaranteed.
 - The meeting list has no pagination yet.
 - Tables are created on startup. Until migrations exist, a schema change means deleting `backend/app.db` locally, or re-creating the tables in the production database.

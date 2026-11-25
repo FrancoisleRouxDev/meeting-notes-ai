@@ -1,3 +1,5 @@
+from datetime import date
+
 import pytest
 
 from app.core.config import settings
@@ -25,8 +27,14 @@ def fake_ai(items):
     return _call
 
 
-def item(text, owner):
-    return AIActionItem(text=text, owner=owner, due_date=None)
+def item(text, owner=None, due_date=None, owner_evidence=None, due_date_evidence=None):
+    return AIActionItem(
+        text=text,
+        owner=owner,
+        owner_evidence=owner_evidence,
+        due_date=due_date,
+        due_date_evidence=due_date_evidence,
+    )
 
 
 def analyse(client, meeting_id):
@@ -46,12 +54,71 @@ def test_analysis_saves_summary_decisions_and_items(alice, ai_configured, monkey
 
 
 def test_owner_is_kept_only_when_named_in_transcript(alice, ai_configured, monkeypatch):
-    monkeypatch.setattr(ai, "_call", fake_ai([item("Send the report", "Zed"), item("Book room", "Ann")]))
-    meeting = new_meeting(alice, transcript="Ann: I will book the room.")
+    monkeypatch.setattr(
+        ai,
+        "_call",
+        fake_ai(
+            [
+                item("Send the report", "Zed", owner_evidence="Zed will send the report."),
+                item("Book room", "Ann", owner_evidence="Ann: I will book the room."),
+                item("Send the annual report", "Ann", owner_evidence="The annual report is ready."),
+            ]
+        ),
+    )
+    meeting = new_meeting(
+        alice,
+        transcript="Ann: I will book the room. The annual report is ready.",
+    )
     analyse(alice, meeting["id"])
     items = alice.get(f"/api/meetings/{meeting['id']}").json()["action_items"]
     owners = {i["text"]: i["owner"] for i in items}
-    assert owners == {"Send the report": None, "Book room": "Ann"}
+    assert owners == {
+        "Send the report": None,
+        "Book room": "Ann",
+        "Send the annual report": None,
+    }
+
+
+def test_due_date_requires_an_exact_quote_with_a_matching_date(alice, ai_configured, monkeypatch):
+    monkeypatch.setattr(
+        ai,
+        "_call",
+        fake_ai(
+            [
+                item(
+                    "Send the report",
+                    due_date=date(2026, 11, 27),
+                    due_date_evidence="by November 27, 2026",
+                ),
+                item("Prepare slides", due_date=date(2026, 11, 27)),
+                item(
+                    "Book the room",
+                    due_date=date(2026, 11, 28),
+                    due_date_evidence="by November 27, 2026",
+                ),
+            ]
+        ),
+    )
+    meeting = new_meeting(
+        alice,
+        transcript="Send the report by November 27, 2026. Prepare slides. Book the room by November 27, 2026.",
+    )
+
+    response = analyse(alice, meeting["id"])
+    assert response.status_code == 200, response.text
+    items = alice.get(f"/api/meetings/{meeting['id']}").json()["action_items"]
+    dates = {item["text"]: item["due_date"] for item in items}
+    assert dates == {
+        "Send the report": "2026-11-27",
+        "Prepare slides": None,
+        "Book the room": None,
+    }
+
+
+def test_relative_weekday_evidence_uses_the_meeting_date():
+    assert ai._dates_in_evidence("Please finish by Friday.", date(2026, 11, 25)) == {
+        date(2026, 11, 27)
+    }
 
 
 def test_ai_outage_keeps_the_transcript(alice, ai_configured, monkeypatch):

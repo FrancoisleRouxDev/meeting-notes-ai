@@ -148,7 +148,9 @@ class AIDecisions(BaseModel):
 class AIActionItem(BaseModel):
     text: str = Field(min_length=1, max_length=500)
     owner: str | None = None
+    owner_evidence: str | None = Field(default=None, max_length=500)
     due_date: date | None = None
+    due_date_evidence: str | None = Field(default=None, max_length=500)
 
 
 class AIActionItems(BaseModel):

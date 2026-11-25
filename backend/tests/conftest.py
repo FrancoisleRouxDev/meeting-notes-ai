@@ -2,6 +2,7 @@ import os
 import tempfile
 
 from cryptography.fernet import Fernet
+from app.core import rate_limit
 
 # Point the app at a throwaway database and a test encryption key before the app is imported.
 _test_dir = tempfile.mkdtemp()
@@ -19,6 +20,7 @@ from helpers import make_client  # noqa: E402
 def fresh_database():
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
+    rate_limit._hits.clear()    
     yield
 
 
