@@ -16,6 +16,7 @@ from app.core.security import (
 from app.db import get_db
 from app.models import User, UserSession
 from app.schemas import LoginIn, RegisterIn, UserOut
+from app.core.rate_limit import hit, limit_by_ip
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -40,7 +41,12 @@ def _start_session(user: User, response: Response, db: Session) -> None:
     )
 
 
-@router.post("/register", response_model=UserOut, status_code=201)
+@router.post(
+    "/register",
+    response_model=UserOut,
+    status_code=201,
+    dependencies=[limit_by_ip("register", limit=5, window_seconds=3600)],
+)
 def register(body: RegisterIn, response: Response, db: Session = Depends(get_db)):
     user = User(email=body.email.lower(), password_hash=hash_password(body.password))
     db.add(user)
@@ -54,10 +60,19 @@ def register(body: RegisterIn, response: Response, db: Session = Depends(get_db)
     return user
 
 
-@router.post("/login", response_model=UserOut)
+@router.post(
+    "/login",
+    response_model=UserOut,
+    dependencies=[limit_by_ip("login", limit=30, window_seconds=900)],
+)
 def login(body: LoginIn, response: Response, db: Session = Depends(get_db)):
+    email = body.email.lower()
+    # Per-account limit: stops guessing one password, even from many IPs.
+    # Applies to every address, so it doesn't reveal which accounts exist.
+    hit(f"login:email:{email}", limit=5, window_seconds=900)
+
     user = db.scalar(
-        select(User).where(User.email == body.email.lower(), User.deleted_at.is_(None))
+        select(User).where(User.email == email, User.deleted_at.is_(None))
     )
     # One message for both "no such email" and "wrong password", so it doesn't reveal which.
     if user is None or not verify_password(user.password_hash, body.password):

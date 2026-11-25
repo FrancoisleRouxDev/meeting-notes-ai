@@ -12,7 +12,8 @@ from sqlalchemy.orm import Session as DbSession
 from app.core.config import settings
 from app.core.security import hash_password
 from app.db import get_db
-from app.models import PasswordResetToken, User, UserSession      
+from app.models import PasswordResetToken, User, UserSession 
+from app.core.rate_limit import hit, limit_by_ip     
 
 log = logging.getLogger(__name__)
 router = APIRouter(prefix="/auth/password-reset", tags=["auth"])
@@ -57,10 +58,13 @@ def send_reset_email(to: str, link: str) -> None:
         # Log the failure but still return the generic message to the user
         log.exception("Could not send password reset email")
         
-@router.post("/request")
+@router.post("/request", dependencies=[limit_by_ip("reset", limit=10, window_seconds=3600)])
 def request_reset(body: ResetRequest, db: DbSession = Depends(get_db)):
-    user = db.scalar(select(User).where(
-        User.email == body.email.lower(), User.deleted_at.is_(None)))
+    email = body.email.lower()
+    # Applies to every address, so it doesn't reveal which accounts exist
+    hit(f"reset:email:{email}", limit=3, window_seconds=3600)
+
+    user = db.scalar(select(User).where(User.email == email, User.deleted_at.is_(None)))
     if user:
         token = secrets.token_urlsafe(32)
         db.add(PasswordResetToken(
