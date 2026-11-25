@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title description">
+  <title id="title">Meeting detail mockup</title>
+  <desc id="description">Meeting summary, decision, action items, and a linked transcript source line.</desc>
+  <rect width="1200" height="720" fill="#f7f8f4"/>
+  <rect width="1200" height="72" fill="#fff"/>
+  <path d="M0 71.5h1200" stroke="#e0e7df"/>
+  <rect x="42" y="19" width="34" height="34" rx="9" fill="#286f5c"/>
+  <text x="53" y="44" fill="#fff" font-family="Arial,sans-serif" font-size="24" font-weight="700">m</text>
+  <text x="86" y="43" fill="#23332f" font-family="Arial,sans-serif" font-size="20" font-weight="700">meeting</text>
+  <text x="170" y="43" fill="#718078" font-family="Arial,sans-serif" font-size="20">notes</text>
+  <text x="224" y="34" fill="#286f5c" font-family="Arial,sans-serif" font-size="10" font-weight="700">AI</text>
+  <rect x="342" y="17" width="91" height="38" rx="8" fill="#e4f0e9"/>
+  <text x="361" y="41" fill="#205b4b" font-family="Arial,sans-serif" font-size="13" font-weight="700">Meetings</text>
+  <text x="461" y="41" fill="#586860" font-family="Arial,sans-serif" font-size="13">New meeting</text>
+  <text x="580" y="41" fill="#586860" font-family="Arial,sans-serif" font-size="13">Open items</text>
+  <text x="1020" y="41" fill="#73817a" font-family="Arial,sans-serif" font-size="12">maya@example.com</text>
+  <rect x="1110" y="17" width="66" height="38" rx="8" fill="#286f5c"/>
+  <text x="1121" y="41" fill="#fff" font-family="Arial,sans-serif" font-size="12" font-weight="700">Log out</text>
+  <text x="92" y="120" fill="#286f5c" font-family="Arial,sans-serif" font-size="13" font-weight="700">← All meetings</text>
+  <text x="92" y="167" fill="#23332f" font-family="Arial,sans-serif" font-size="32" font-weight="700">Weekly product sync</text>
+  <text x="92" y="194" fill="#73817a" font-family="Arial,sans-serif" font-size="13">2026-11-18  ·  Analysis complete</text>
+  <rect x="866" y="119" width="242" height="57" rx="11" fill="#fff" stroke="#e0e7df"/>
+  <text x="886" y="143" fill="#23332f" font-family="Arial,sans-serif" font-size="13" font-weight="700">Share with your team</text>
+  <text x="886" y="162" fill="#73817a" font-family="Arial,sans-serif" font-size="11">Send notes to your connected Slack channel</text>
+  <text x="92" y="244" fill="#23332f" font-family="Arial,sans-serif" font-size="18" font-weight="700">Summary</text>
+  <rect x="92" y="258" width="1016" height="76" rx="11" fill="#fff" stroke="#e0e7df"/>
+  <text x="112" y="289" fill="#52635b" font-family="Arial,sans-serif" font-size="14">The team aligned on the launch sequence and agreed to resolve the last onboarding issues before</text>
+  <text x="112" y="313" fill="#52635b" font-family="Arial,sans-serif" font-size="14">release. Feedback from beta users will be reviewed at the end of the week.</text>
+  <text x="92" y="375" fill="#23332f" font-family="Arial,sans-serif" font-size="18" font-weight="700">Decisions</text>
+  <rect x="92" y="390" width="1016" height="53" rx="11" fill="#fff" stroke="#e0e7df"/>
+  <circle cx="115" cy="416" r="10" fill="#e4f0e9"/>
+  <text x="111" y="420" fill="#286f5c" font-family="Arial,sans-serif" font-size="12" font-weight="700">✓</text>
+  <text x="137" y="421" fill="#52635b" font-family="Arial,sans-serif" font-size="13">Keep the beta open through Friday, then review feedback.</text>
+  <text x="92" y="484" fill="#23332f" font-family="Arial,sans-serif" font-size="18" font-weight="700">Action items</text>
+  <rect x="92" y="500" width="1016" height="76" rx="11" fill="#fff" stroke="#e0e7df"/>
+  <rect x="114" y="523" width="17" height="17" rx="4" fill="none" stroke="#a9b9ac" stroke-width="1.5"/>
+  <text x="147" y="528" fill="#23332f" font-family="Arial,sans-serif" font-size="14" font-weight="700">Send the revised proposal</text>
+  <text x="147" y="551" fill="#73817a" font-family="Arial,sans-serif" font-size="12">Owner: Maya  ·  Due: 2026-11-28  ·  to do</text>
+  <rect x="850" y="518" width="120" height="31" rx="7" fill="#e4f0e9"/>
+  <text x="866" y="538" fill="#286f5c" font-family="Arial,sans-serif" font-size="11" font-weight="700">Transcript line 12 ↗</text>
+  <rect x="982" y="518" width="53" height="31" rx="7" fill="#286f5c"/>
+  <text x="994" y="538" fill="#fff" font-family="Arial,sans-serif" font-size="11" font-weight="700">Edit</text>
+  <rect x="1044" y="518" width="48" height="31" rx="7" fill="#a63e36"/>
+  <text x="1053" y="538" fill="#fff" font-family="Arial,sans-serif" font-size="11" font-weight="700">Delete</text>
+  <rect x="92" y="598" width="1016" height="83" rx="11" fill="#fff" stroke="#b9d8c4" stroke-width="1.5"/>
+  <text x="114" y="621" fill="#286f5c" font-family="Arial,sans-serif" font-size="12" font-weight="700">TRANSCRIPT · LINE 12</text>
+  <rect x="108" y="633" width="985" height="32" rx="6" fill="#d7ecdf"/>
+  <text x="119" y="654" fill="#52635b" font-family="Arial,sans-serif" font-size="12">12  Maya: I'll send the revised proposal by Friday afternoon.</text>
+</svg>

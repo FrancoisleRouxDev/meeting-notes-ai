@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title description">
+  <title id="title">Open action items mockup</title>
+  <desc id="description">A cross-meeting action item list with owner, status, due date, filters, and transcript source links.</desc>
+  <rect width="1200" height="720" fill="#f7f8f4"/>
+  <rect width="1200" height="72" fill="#fff"/>
+  <path d="M0 71.5h1200" stroke="#e0e7df"/>
+  <rect x="42" y="19" width="34" height="34" rx="9" fill="#286f5c"/>
+  <text x="53" y="44" fill="#fff" font-family="Arial,sans-serif" font-size="24" font-weight="700">m</text>
+  <text x="86" y="43" fill="#23332f" font-family="Arial,sans-serif" font-size="20" font-weight="700">meeting</text>
+  <text x="170" y="43" fill="#718078" font-family="Arial,sans-serif" font-size="20">notes</text>
+  <text x="224" y="34" fill="#286f5c" font-family="Arial,sans-serif" font-size="10" font-weight="700">AI</text>
+  <text x="368" y="41" fill="#586860" font-family="Arial,sans-serif" font-size="13">Meetings</text>
+  <text x="470" y="41" fill="#586860" font-family="Arial,sans-serif" font-size="13">New meeting</text>
+  <rect x="581" y="17" width="94" height="38" rx="8" fill="#e4f0e9"/>
+  <text x="599" y="41" fill="#205b4b" font-family="Arial,sans-serif" font-size="13" font-weight="700">Open items</text>
+  <text x="1020" y="41" fill="#73817a" font-family="Arial,sans-serif" font-size="12">maya@example.com</text>
+  <rect x="1110" y="17" width="66" height="38" rx="8" fill="#286f5c"/>
+  <text x="1121" y="41" fill="#fff" font-family="Arial,sans-serif" font-size="12" font-weight="700">Log out</text>
+  <text x="96" y="144" fill="#23332f" font-family="Arial,sans-serif" font-size="32" font-weight="700">My action items</text>
+  <text x="96" y="174" fill="#73817a" font-family="Arial,sans-serif" font-size="14">A clear view of what still needs to happen across your meetings.</text>
+  <text x="96" y="229" fill="#52635b" font-family="Arial,sans-serif" font-size="12" font-weight="700">STATUS</text>
+  <rect x="96" y="241" width="210" height="43" rx="8" fill="#fff" stroke="#d5ded6"/>
+  <text x="113" y="268" fill="#23332f" font-family="Arial,sans-serif" font-size="13">Open (not done)  ▾</text>
+  <text x="329" y="229" fill="#52635b" font-family="Arial,sans-serif" font-size="12" font-weight="700">OWNER</text>
+  <rect x="329" y="241" width="235" height="43" rx="8" fill="#fff" stroke="#d5ded6"/>
+  <text x="346" y="268" fill="#87938c" font-family="Arial,sans-serif" font-size="13">Any owner</text>
+  <rect x="585" y="254" width="16" height="16" rx="4" fill="#286f5c"/>
+  <text x="589" y="266" fill="#fff" font-family="Arial,sans-serif" font-size="10" font-weight="700">✓</text>
+  <text x="610" y="267" fill="#52635b" font-family="Arial,sans-serif" font-size="13">Overdue only</text>
+  <text x="96" y="332" fill="#23332f" font-family="Arial,sans-serif" font-size="15" font-weight="700">3 items to keep moving</text>
+  <rect x="96" y="351" width="1008" height="91" rx="12" fill="#fff" stroke="#e0e7df"/>
+  <text x="119" y="382" fill="#23332f" font-family="Arial,sans-serif" font-size="15" font-weight="700">Send the revised proposal</text>
+  <text x="119" y="410" fill="#73817a" font-family="Arial,sans-serif" font-size="12">Maya  ·  Due Nov 28  ·  <tspan fill="#286f5c" font-weight="700">to do</tspan></text>
+  <rect x="880" y="375" width="194" height="38" rx="8" fill="#f0f3ed"/>
+  <text x="899" y="399" fill="#286f5c" font-family="Arial,sans-serif" font-size="12" font-weight="700">Weekly product sync · Line 12 ↗</text>
+  <rect x="96" y="456" width="1008" height="91" rx="12" fill="#fff" stroke="#e0e7df"/>
+  <text x="119" y="487" fill="#23332f" font-family="Arial,sans-serif" font-size="15" font-weight="700">Confirm the launch checklist</text>
+  <text x="119" y="515" fill="#73817a" font-family="Arial,sans-serif" font-size="12">Ethan  ·  Due not stated  ·  <tspan fill="#286f5c" font-weight="700">in progress</tspan></text>
+  <rect x="880" y="480" width="194" height="38" rx="8" fill="#f0f3ed"/>
+  <text x="899" y="504" fill="#286f5c" font-family="Arial,sans-serif" font-size="12" font-weight="700">Weekly product sync · Line 18 ↗</text>
+  <rect x="96" y="561" width="1008" height="91" rx="12" fill="#fff" stroke="#e0e7df"/>
+  <text x="119" y="592" fill="#23332f" font-family="Arial,sans-serif" font-size="15" font-weight="700">Share customer feedback with design</text>
+  <text x="119" y="620" fill="#73817a" font-family="Arial,sans-serif" font-size="12">Not assigned  ·  Due Dec 2  ·  <tspan fill="#286f5c" font-weight="700">to do</tspan></text>
+  <rect x="880" y="585" width="194" height="38" rx="8" fill="#f0f3ed"/>
+  <text x="899" y="609" fill="#286f5c" font-family="Arial,sans-serif" font-size="12" font-weight="700">Customer research · Line 7 ↗</text>
+</svg>

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title description">
+  <title id="title">Meeting Notes AI welcome page mockup</title>
+  <desc id="description">A welcoming product landing page with a meeting summary preview and a get started call to action.</desc>
+  <rect width="1200" height="720" fill="#f7f8f4"/>
+  <path d="M880 100c100-70 240 0 300 75v360c-80 20-180-5-250-50-90-60-150-250-50-385Z" fill="#e7eee5"/>
+  <rect x="68" y="28" width="34" height="34" rx="9" fill="#286f5c"/>
+  <text x="79" y="53" fill="#fff" font-family="Arial,sans-serif" font-size="24" font-weight="700">m</text>
+  <text x="112" y="52" fill="#23332f" font-family="Arial,sans-serif" font-size="22" font-weight="700">meeting</text>
+  <text x="204" y="52" fill="#718078" font-family="Arial,sans-serif" font-size="22">notes</text>
+  <text x="262" y="42" fill="#286f5c" font-family="Arial,sans-serif" font-size="10" font-weight="700">AI</text>
+  <text x="690" y="50" fill="#586860" font-family="Arial,sans-serif" font-size="14">How it works</text>
+  <text x="825" y="50" fill="#586860" font-family="Arial,sans-serif" font-size="14">Why Meeting Notes</text>
+  <text x="1015" y="50" fill="#586860" font-family="Arial,sans-serif" font-size="14">Sign in</text>
+  <rect x="1080" y="29" width="96" height="38" rx="9" fill="#286f5c"/>
+  <text x="1098" y="53" fill="#fff" font-family="Arial,sans-serif" font-size="13" font-weight="700">Get started</text>
+  <circle cx="78" cy="168" r="5" fill="#d78a56"/>
+  <text x="92" y="172" fill="#286f5c" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="1.1">A LITTLE MORE CLARITY AFTER EVERY MEETING</text>
+  <text x="68" y="247" fill="#23332f" font-family="Arial,sans-serif" font-size="51" font-weight="700" letter-spacing="-2">Good meetings deserve</text>
+  <text x="68" y="306" fill="#286f5c" font-family="Arial,sans-serif" font-size="51" font-weight="700" letter-spacing="-2">great follow-through.</text>
+  <text x="68" y="353" fill="#63726a" font-family="Arial,sans-serif" font-size="17">Turn a meeting transcript into a clear summary, decisions,</text>
+  <text x="68" y="380" fill="#63726a" font-family="Arial,sans-serif" font-size="17">and action items—with owners, dates, and a link back to</text>
+  <text x="68" y="407" fill="#63726a" font-family="Arial,sans-serif" font-size="17">the words that matter.</text>
+  <rect x="68" y="443" width="145" height="50" rx="9" fill="#286f5c"/>
+  <text x="88" y="474" fill="#fff" font-family="Arial,sans-serif" font-size="15" font-weight="700">Try it free   →</text>
+  <rect x="225" y="443" width="172" height="50" rx="9" fill="#f7f8f4" stroke="#d7e1d8"/>
+  <text x="250" y="474" fill="#23332f" font-family="Arial,sans-serif" font-size="14" font-weight="700">See how it works</text>
+  <text x="68" y="527" fill="#78857e" font-family="Arial,sans-serif" font-size="12">Your transcript stays yours. AI suggestions are yours to review and edit.</text>
+  <g transform="rotate(1 820 360)">
+    <rect x="565" y="125" width="575" height="440" rx="18" fill="#fff" stroke="#e1e8df"/>
+    <path d="M565 143a18 18 0 0 1 18-18h539a18 18 0 0 1 18 18v26H565Z" fill="#fff"/>
+    <circle cx="590" cy="148" r="4" fill="#e5a078"/><circle cx="604" cy="148" r="4" fill="#e4c47d"/><circle cx="618" cy="148" r="4" fill="#9dc2a6"/>
+    <text x="682" y="152" fill="#97a39b" font-family="Arial,sans-serif" font-size="10" font-weight="700" letter-spacing="1">YOUR MEETING, MADE USEFUL</text>
+    <text x="594" y="210" fill="#8d9991" font-family="Arial,sans-serif" font-size="10" font-weight="700" letter-spacing="1">TUESDAY · PRODUCT</text>
+    <text x="594" y="240" fill="#23332f" font-family="Arial,sans-serif" font-size="23" font-weight="700">Weekly product sync</text>
+    <rect x="1022" y="195" width="87" height="27" rx="14" fill="#eaf3ed"/>
+    <text x="1041" y="213" fill="#36735d" font-family="Arial,sans-serif" font-size="11" font-weight="700">AI notes</text>
+    <rect x="592" y="260" width="520" height="91" rx="11" fill="#f7f9f5"/>
+    <rect x="608" y="277" width="30" height="30" rx="8" fill="#e0eee4"/>
+    <text x="617" y="298" fill="#39745e" font-family="Arial,sans-serif" font-size="15" font-weight="700">✦</text>
+    <text x="650" y="287" fill="#23332f" font-family="Arial,sans-serif" font-size="13" font-weight="700">The short version</text>
+    <text x="650" y="309" fill="#66746b" font-family="Arial,sans-serif" font-size="12">The team aligned on the launch sequence and agreed</text>
+    <text x="650" y="328" fill="#66746b" font-family="Arial,sans-serif" font-size="12">to resolve the last onboarding issues before release.</text>
+    <rect x="592" y="361" width="520" height="68" rx="11" fill="#fbf8f1"/>
+    <rect x="608" y="379" width="30" height="30" rx="8" fill="#f4e8d8"/>
+    <text x="617" y="399" fill="#a06e3d" font-family="Arial,sans-serif" font-size="15" font-weight="700">✓</text>
+    <text x="650" y="387" fill="#23332f" font-family="Arial,sans-serif" font-size="13" font-weight="700">Decision</text>
+    <text x="650" y="409" fill="#66746b" font-family="Arial,sans-serif" font-size="12">Keep the beta open through Friday, then review feedback.</text>
+    <text x="594" y="463" fill="#23332f" font-family="Arial,sans-serif" font-size="14" font-weight="700">Next up</text>
+    <text x="1040" y="463" fill="#89958d" font-family="Arial,sans-serif" font-size="11">2 action items</text>
+    <rect x="597" y="483" width="14" height="14" rx="4" fill="none" stroke="#b5c5b8" stroke-width="1.5"/>
+    <text x="622" y="493" fill="#23332f" font-family="Arial,sans-serif" font-size="12" font-weight="700">Send the revised proposal</text>
+    <text x="622" y="511" fill="#87938c" font-family="Arial,sans-serif" font-size="10">Maya  ·  Fri, Nov 28</text>
+    <text x="1032" y="501" fill="#39745e" font-family="Arial,sans-serif" font-size="10" font-weight="700">Line 12</text>
+    <rect x="597" y="523" width="14" height="14" rx="4" fill="none" stroke="#b5c5b8" stroke-width="1.5"/>
+    <text x="622" y="533" fill="#23332f" font-family="Arial,sans-serif" font-size="12" font-weight="700">Confirm the launch checklist</text>
+    <text x="622" y="550" fill="#87938c" font-family="Arial,sans-serif" font-size="10">Ethan  ·  Not stated</text>
+    <text x="1032" y="541" fill="#39745e" font-family="Arial,sans-serif" font-size="10" font-weight="700">Line 18</text>
+  </g>
+  <text x="68" y="670" fill="#849087" font-family="Arial,sans-serif" font-size="12">Thoughtful notes for what comes next.</text>
+</svg>
