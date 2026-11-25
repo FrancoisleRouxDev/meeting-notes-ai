@@ -10,6 +10,7 @@ from app.models import User
 DEMO_USERS = (
     ("demo1@example.com", "LaunchPadDemo1!"),
     ("demo2@example.com", "LaunchPadDemo2!"),
+    ("demo3@example.com", "LaunchPadDemo3!"),
 )
 
 

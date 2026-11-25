@@ -67,6 +67,7 @@ class ActionItem(Base):
     # Blank unless the transcript names them. The AI never guesses an owner or a date.
     owner: Mapped[str | None] = mapped_column(String(100), default=None)
     due_date: Mapped[date | None] = mapped_column(Date, default=None)
+    source_line: Mapped[int | None] = mapped_column(default=None)
     # to do, in progress or done. Users change this, and the AI always creates items as "to do".
     status: Mapped[str] = mapped_column(String(20), default="to do")
 

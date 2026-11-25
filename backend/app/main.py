@@ -7,11 +7,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app import models  # noqa: F401  (registers the tables with SQLAlchemy)
 from app.core.config import settings
-from app.db import Base, engine
 from app.routers import action_items, auth, integrations, meetings, password_reset
-
-# Temporary shortcut to create tables. Alembic migrations replace this before submission.
-Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Meeting Notes AI")
 
